@@ -1,0 +1,16 @@
+Informação mensal de cada hospital português sobre morbilidade e mortalidade por categoria clínica e gama etária
+Fonte: Ministério da Saúde
+
+Colunas
+Período - mês de reporte
+Código Capítulo Diagnóstico ICD9CM/ICD10CMPCS - código do grupo de diagnósticos
+Descrição Capítulo Diagnóstico ICD9CM/ICD10CMPCS - descrição respetiva
+Instituição - hospital
+Região - região de saúde
+Faixa Etária - faixa etária
+Género
+Internamentos - número de internamentos
+Dias de Internamento - total de dias de internamentos
+Ambulatório - número de episódios em ambulatório
+Óbitos - número de óbitos
+
