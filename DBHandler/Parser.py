@@ -51,7 +51,6 @@ def parseString(line : str):
 
 def parseCSV(filePath : str) -> list[DBTypes.Entry]:
   listParsed = []
-  idx = 0
   if(os.path.isfile(filePath) == False):
       print("CSV not found")
       return None
@@ -59,9 +58,7 @@ def parseCSV(filePath : str) -> list[DBTypes.Entry]:
     file = open(filePath,"r")
     file.readline()
     while line := file.readline():
-      idx += 1
       listParsed += [parseString(line)]
-      if idx > 10: break
     file.close()
   except OSError:
      print("Error opening file")

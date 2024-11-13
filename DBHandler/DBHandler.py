@@ -19,7 +19,10 @@ class DBHandler:
       exit()
 
     print("Cursor created successfully")
-    self._cursor.row_factory = sqlite3.Row
+    if(self.createTables() == False):
+      print("Error creating tables,aborting...")
+      exit()
+    print("Tables created successfully")
 
 
   def __del__(self):
@@ -54,16 +57,58 @@ class DBHandler:
         print("Entries is Null,aborting...")
         exit()
       return entries
-  
+
+
   def insert(self):
     entries = self.getData()
+
+    def checkRegions(self,regionName):
+      if(len(self._cursor.execute('SELECT * FROM regions WHERE name = ?',(regionName,)).fetchall()) == 0):
+        self._cursor.execute("INSERT INTO regions VALUES (NULL,?)",(regionName,))
+
+    def insertInstitution(self,institutionName,regionName):
+      if(len(self._cursor.execute('SELECT * FROM institutions WHERE name = ?',(institutionName,)).fetchall()) == 0):
+        self._cursor.execute("INSERT INTO institutions VALUES (NULL,?,?)",
+                             (institutionName,self._cursor.execute('SELECT id FROM regions WHERE name = ?',(regionName,)).fetchone()[0]))
+
+    def insertAgeGroup(self,minimumAge,maximumAge):
+      if(len(self._cursor.execute('SELECT * FROM ageGroups WHERE (minimumAge,maximumAge)=(?,?)',(minimumAge,maximumAge)).fetchall()) == 0):
+        self._cursor.execute("INSERT INTO ageGroups VALUES (NULL,?,?)",(minimumAge,maximumAge))
+
+    def insertPeriod(self,month,year):
+      if(len(self._cursor.execute('SELECT * FROM periods WHERE (month,year)=(?,?)',(month,year)).fetchall()) == 0):
+        self._cursor.execute("INSERT INTO periods VALUES (NULL,?,?)",(month,year))
+
+    def inserDiagnosticGroup(self,code,description):
+      if(len(self._cursor.execute('SELECT * FROM diagnosticGroups WHERE (code,description)=(?,?)',(code,description)).fetchall()) == 0):
+        self._cursor.execute("INSERT INTO diagnosticGroups VALUES (NULL,?,?)",(code,description))
+
+    def insertHealthRegistry(self : DBHandler,entry : DBTypes.Entry):
+      institutionId = self._cursor.execute('SELECT id FROM institutions where name = ?',(entry.institution.name,)).fetchone()[0]
+      ageId = self._cursor.execute('SELECT id FROM ageGroups where (minimumAge,maximumAge) = (?,?)',(entry.ageGroup.minimumAge,entry.ageGroup.maximumAge)).fetchone()[0]
+      periodId = self._cursor.execute('SELECT id FROM periods where (month,year) = (?,?)',(entry.period.month,entry.period.year)).fetchone()[0]
+      diagnosticId = self._cursor.execute('SELECT id FROM diagnosticGroups where code = ?',(entry.diagnostic.index,)).fetchone()[0]
+
+      gender : int = 1
+      health = entry.healthRegistry
+      if(health.gender == 'F'): gender = 0
+      self._cursor.execute("INSERT INTO healthRegistrys VALUES (NULL,?,?,?,?,?,?,?,?,?)",
+                           (gender,health.numberOfHospitalization,health.daysOfHospitalization,
+                           health.outpatient,health.deaths,institutionId,ageId,periodId,diagnosticId)
+                          )
+
+
     for entry in entries:
-      if(len(self._cursor.execute('SELECT * FROM regions WHERE name = ?',(entry.region.name,)).fetchall()) == 0):
-        self._cursor.execute("INSERT INTO regions VALUES (NULL,?)",(entry.region.name,))
-      self._cursor.execute("INSERT INTO institutions VALUES (NULL,?,?)",(entry.institution.name,
-                                                                         self._cursor.execute('SELECT id FROM regions WHERE name = ?',(entry.region.name,)).fetchone()[0]))
+      checkRegions(self,entry.region.name)
+      insertInstitution(self,entry.institution.name,entry.region.name)
+      insertAgeGroup(self,entry.ageGroup.minimumAge,entry.ageGroup.maximumAge)
+      insertPeriod(self,entry.period.month,entry.period.year)
+      inserDiagnosticGroup(self,entry.diagnostic.index,entry.diagnostic.description)
+      insertHealthRegistry(self,entry)
+      
       
     self._connector.commit()
+    print("All data inserted")
       
 
   def createTables(self):
@@ -75,7 +120,7 @@ class DBHandler:
     """CREATE TABLE IF NOT EXISTS diagnosticGroups (
             id INTEGER PRIMARY KEY,
             code INT NOT NULL, 
-            name VARCHAR(255) NOT NULL 
+            description VARCHAR(255) NOT NULL 
         );""",
     """CREATE TABLE IF NOT EXISTS periods (
             id INTEGER PRIMARY KEY, 
@@ -117,7 +162,9 @@ class DBHandler:
         self._cursor.execute(statement)
       except:
         print("Unable to create table, Statement:\n" + statement)
+        return False
     self._connector.commit()
+    return True
 
   _connector : sqlite3.Connection = None
   _cursor : sqlite3.Cursor = None 
@@ -125,7 +172,6 @@ class DBHandler:
   
 if __name__ == "__main__":
   handler = DBHandler()
-  handler.createTables()
   handler.insert()
 
 
