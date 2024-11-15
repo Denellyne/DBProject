@@ -167,10 +167,14 @@ class DBHandler:
   _connector : sqlite3.Connection = None
   _cursor : sqlite3.Cursor = None 
 
-  
-if __name__ == "__main__":
+
+
+def main():
   handler = DBHandler()
   handler.insert()
 
+
+if __name__ == "__main__":
+  main()
 
 
