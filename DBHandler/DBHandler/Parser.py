@@ -1,5 +1,5 @@
 import os
-import DBTypes
+from DBHandler import DBTypes
 
 def parseString(line : str):
   period = DBTypes.Period(line[:7])

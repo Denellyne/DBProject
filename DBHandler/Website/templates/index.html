@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Informação Mensal de cada hospital Português sobre morbilidade e mortalidade</h1>
+
+<h2>Acerca</h2>
+<p>Dados adquiridos apartir do Ministério de Saúde, distinguidos por categoria clínica e faixa etária
+</p>
+
+<h2>Some database statistics</h2>
+<table>
+<tr>
+  <th>Items</th>
+  <th>Count</th>
+</tr>
+<tr>
+  <td>Age Groups</td>
+  <td>{{ stats[0] }}</td>
+</tr>
+<tr>
+  <td>Institutions</td>
+  <td>{{ stats[1] }}</td>
+</tr>
+<tr>
+  <td>Regions</td>
+  <td>{{ stats[2] }}</td>
+</tr>
+<tr>
+  <td>Diagnostics</td>
+  <td>{{ stats[3] }}</td>
+</tr>
+<tr>
+  <td>Periods</td>
+  <td>{{ stats[4] }}</td>
+</tr>
+<tr>
+  <td>Health Registries</td>
+  <td>{{ stats[5] }}</td>
+</tr>
+</table>
+{% endblock %}
+
+<!--
+<tr>
+  <td>Actors in movies</td>
+  <td>{{ stats.n_actors }}</td>
+</tr>
+<tr>
+  <td>Movie genres</td>
+  <td>{{ stats.n_genres }}</td>
+</tr>
+<tr>
+  <td>Streams</td>
+  <td>{{ stats.n_streams }}</td>
+</tr>
+<tr>
+  <td>Customers</td>
+  <td>{{ stats.n_customers }}</td>
+</tr>
+<tr>
+  <td>Countries</td>
+  <td>{{ stats.n_countries }}</td>
+</tr>
+<tr>
+  <td>Regions</td>
+  <td>{{ stats.n_regions }}</td>
+</tr>
+</table>
+
+
+
+<h2>Sample functionality</h2>
+
+<h3>Movies</h3>
+<p>
+   <a href="/movies">List all</a>
+</p>
+<p>Get movie info:
+<form name="mid" action="javascript:window.open('/movies/'+document.forms['mid'].elements['id'].value,'_self')">
+   Movie Id:<input value="123" name="id" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+  
+<p>Search by title:
+<form name="msearch" action="javascript:window.open('/movies/search/'+document.forms['msearch'].elements['expr'].value,'_self')">
+  <input name="expr" id="expr" value="Spider" required/>
+  <input type="submit" value="search"/>
+</form>
+</p>
+
+<h3>Actors</h3>
+<p>
+   <a href="/actors">List all</a>
+</p>
+<p>Get actor info:
+<form name="aid" action="javascript:window.open('/actors/'+document.forms['aid'].elements['id'].value,'_self')">
+   Actor Id:<input value="123" name="id" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+  
+<p>Search by name (prone to <a href="https://en.wikipedia.org/wiki/SQL_injection">SQL injection</a>!)
+  <form name="asearch" action="javascript:window.open('/actors/search/'+document.forms['asearch'].elements['expr'].value,'_self')">
+    <input name="expr" id="expr" value="Tom" required/>
+    <input type="submit" value="search"/>
+  </form>
+</p>
+
+<h3>Genres</h3>
+<p>
+   <a href="/genres">List all</a>
+</p>
+
+<p>Get genre info:
+<form name="gid" action="javascript:window.open('/genres/'+document.forms['gid'].elements['id'].value,'_self')">
+   Genre Id:<input value="1" name="id" type="number" min="1"/><input type="submit" value="get"/>
+</form>
+</p>
+
+<h3>Staff</h3>
+<p>
+   <a href="/staff">List all</a>
+</p>
+
+-->
+
