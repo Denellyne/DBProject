@@ -1,4 +1,4 @@
-
-*.pyc
 *.pyc
 /DBHandler/Website/__pycache__
+DBHandler/morbilidade.db
+

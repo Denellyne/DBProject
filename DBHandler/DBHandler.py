@@ -89,11 +89,9 @@ class DBHandler:
       periodId = self._cursor.execute('SELECT id FROM periods where (month,year) = (?,?)',(entry.period.month,entry.period.year)).fetchone()[0]
       diagnosticId = self._cursor.execute('SELECT id FROM diagnosticGroups where code = ?',(entry.diagnostic.index,)).fetchone()[0]
 
-      gender : int = 1
       health = entry.healthRegistry
-      if(health.gender == 'F'): gender = 0
       self._cursor.execute("INSERT INTO healthRegistrys VALUES (NULL,?,?,?,?,?,?,?,?,?)",
-                           (gender,health.numberOfHospitalization,health.daysOfHospitalization,
+                           (health.gender,health.numberOfHospitalization,health.daysOfHospitalization,
                            health.outpatient,health.deaths,institutionId,ageId,periodId,diagnosticId)
                           )
 
@@ -141,7 +139,7 @@ class DBHandler:
         );""",
     """CREATE TABLE IF NOT EXISTS healthRegistrys (
         id INTEGER PRIMARY KEY,
-        gender INT NOT NULL,
+        gender CHAR(1) NOT NULL,
         hospitalization INT NOT NULL,
         daysOfHospitalization INT NOT NULL,
         outpatient INT NOT NULL,
@@ -169,10 +167,14 @@ class DBHandler:
   _connector : sqlite3.Connection = None
   _cursor : sqlite3.Cursor = None 
 
-  
-if __name__ == "__main__":
+
+
+def main():
   handler = DBHandler()
   handler.insert()
 
+
+if __name__ == "__main__":
+  main()
 
 
