@@ -28,6 +28,9 @@ class DBHandler:
       print("Error creating tables,aborting...")
       exit()
     print("Tables created successfully")
+    
+    if(needsInsertion == False):
+      return
 
     self.__insert()
 
