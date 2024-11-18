@@ -2,3 +2,5 @@
 /DBHandler/Website/__pycache__
 DBHandler/morbilidade.db
 
+/DBHandler/DBHandler/__pycache__
+*.pyc

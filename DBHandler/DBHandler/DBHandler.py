@@ -57,8 +57,23 @@ class DBHandler:
       print("Cursor is invalid,aborting...")
       exit()
 
+    if len(input) == 0: return None
+
+  
     data = self.__queryDatabase(input)
-    return data 
+    names = [description[0] for description in self._cursor.description]
+
+    result = '<table border="1"><tr>'
+    for val in names:
+      result +=  '<th>'+val+'</th>'
+    result += '</tr>'
+    for values in data:
+      result += '<tr>'
+      for val in values:
+        result +=  '<td>'+str(val)+'</td>'
+      result += '</tr>'
+
+    return result
 
   def getData(self,filePath = 'DBHandler/morbilidade.csv'):
       entries = Parser.parseCSV(filePath)

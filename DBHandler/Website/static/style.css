@@ -27,6 +27,15 @@ a.anchor {
   left: 0;
   bottom: 0; }
 
+#inputQuery {
+  margin: 0px 10px 10px;
+  display: inline-block;
+  padding : 0;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  float : right;
+  }
+
 h1, h2, h3, h4, h5, h6 {
   margin: 20px 0 10px;
   padding: 0;

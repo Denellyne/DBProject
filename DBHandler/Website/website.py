@@ -1,8 +1,16 @@
-from flask import Flask,render_template
+from flask import Flask,render_template,request
 from DBHandler import DBHandler
 
 app = Flask(__name__)
 
+@app.post("/search")
+def foo_post():
+  sqlCommand = request.form["sql"]
+  handler = DBHandler.DBHandler()
+  data = handler.query(sqlCommand)
+  return render_template('search.html',sql=data,sqlCommand=sqlCommand)
+
+    
 #-
   #JOIN
     #  (SELECT COUNT(*) n_actors FROM ACTOR)

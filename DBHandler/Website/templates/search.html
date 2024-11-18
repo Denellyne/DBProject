@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Search Results</h1>
+
+<label id="inputQuery" for="query">
+  <h3>Input your own Query</h3>
+  <form method=post action=/search>
+    <textarea name=sql></textarea>
+    <input type=submit name=save value=Execute>
+  </form>
+</label>
+
+<h3> Input: {{ sqlCommand }}</h3>
+
+
+{{ sql|safe }}
+
+{% endblock %}
+

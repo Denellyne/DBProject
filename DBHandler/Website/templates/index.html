@@ -4,10 +4,19 @@
 <h1>Informação Mensal de cada hospital Português sobre morbilidade e mortalidade</h1>
 
 <h2>Acerca</h2>
-<p>Dados adquiridos apartir do Ministério de Saúde, distinguidos por categoria clínica e faixa etária
-</p>
+<font size="3">Dados adquiridos apartir do Ministério de Saúde, distinguidos por categoria clínica e faixa etária
+</font>
 
-<h2>Some database statistics</h2>
+
+<label id="inputQuery" for="query">
+  <h3>Input your own Query</h3>
+  <form method=post action=/search>
+    <textarea name=sql></textarea>
+    <input type=submit name=save value=Execute>
+  </form>
+</label>
+<h3>Some database statistics</h3>
+
 <table>
 <tr>
   <th>Items</th>
@@ -38,6 +47,10 @@
   <td>{{ stats[5] }}</td>
 </tr>
 </table>
+
+
+
+
 {% endblock %}
 
 <!--
