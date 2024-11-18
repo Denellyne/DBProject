@@ -52,16 +52,16 @@ class DBHandler:
       return None
 
   
-  def query(self,input : str):
+  def queryForHTML(self,input : str):
     if(self._cursor is None):
       print("Cursor is invalid,aborting...")
       exit()
 
     if len(input) == 0: return None
 
-  
     data = self.__queryDatabase(input)
     names = [description[0] for description in self._cursor.description]
+    if len(data) == 0: return None
 
     result = '<table border="1"><tr>'
     for val in names:
@@ -74,6 +74,16 @@ class DBHandler:
       result += '</tr>'
 
     return result
+
+  def query(self,input : str):
+    if(self._cursor is None):
+      print("Cursor is invalid,aborting...")
+      exit()
+
+    if len(input) == 0: return None
+  
+    data = self.__queryDatabase(input)
+    return data
 
   def getData(self,filePath = 'DBHandler/morbilidade.csv'):
       entries = Parser.parseCSV(filePath)

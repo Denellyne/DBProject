@@ -7,7 +7,7 @@ app = Flask(__name__)
 def foo_post():
   sqlCommand = request.form["sql"]
   handler = DBHandler.DBHandler()
-  data = handler.query(sqlCommand)
+  data = handler.queryForHTML(sqlCommand)
   return render_template('search.html',sql=data,sqlCommand=sqlCommand)
 
     
