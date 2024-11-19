@@ -64,7 +64,6 @@ def parseCSV(filePath : str) -> list[DBTypes.Entry]:
      print("Error opening file")
      return None
     
+  file.close()
   return listParsed
   
-
-parseCSV("morbilidade.csv")
