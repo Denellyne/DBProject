@@ -1,45 +1,8 @@
 from flask import Flask,render_template,request
 from DBHandler import DBHandler
+from Website.util import addSubmit,addQuerySelector
 
 app = Flask(__name__)
-
-def addSubmit(endpoint,queryList):
-  querys = """
-  <form method =post action=/"""
-  querys += endpoint + '>'
-
-  for query in queryList:
-    querys += query +'\n'
-
-  querys += "<input type=submit name=save value=Submit>" + "</form>"
-
-  return querys
-
-
-def addQuerySelector(label,string,data,id):
-  querys = "<label for=\""
-  querys += label + "\">" + string + """</label>
-  <select name="""
-  querys +=  '"' +label + "\" id =\"" + label + "\">"
-
-  selected : int = int(id) - 1
-
-  info = None
-
-  for values in data:
-    if(selected == 0):
-      info = values[1]
-      querys +="<option value=\""+str(values[0])+"\" selected>"+str(values[1])+"</option>"
-    
-    else: 
-      querys +="<option value=\""+str(values[0])+"\">"+str(values[1])+"</option>"
-
-    selected -= 1    
-  querys += """
-  </select><br>
-    """
-
-  return querys,info
 
 @app.post("/search")
 def search():
@@ -81,7 +44,7 @@ def diagnosticsByInstitution():
     year = request.form["year"] 
 
   handler = DBHandler.DBHandler()
-  sqlCommand = "SELECT d.description as Description,a.minimumAge,a.maximumAge,i.name as Institution,r.name as Region,p.month as Month,p.year as Year,hR.gender as Gender,hR.hospitalizations as Hospitalizations,hR.daysOfHospitalization as DaysOfHospitalization,hR.outpatient as Outpatient,hR.deaths as Deaths FROM healthRegistries hR inner join institutions i on hR.institutionId = i.id inner join periods p on hR.periodId = p.id inner join regions r on i.regionId = r.id inner join diagnosticGroups d on hR.diagnosticGroupId = d.id inner join ageGroups a on hR.ageGroupId = a.id WHERE p.month ="
+  sqlCommand = "SELECT d.description as Description,a.minimumAge,a.maximumAge,i.name as Institution,r.name as Region,p.month as Month,p.year as Year,hR.gender as Gender,hR.hospitalizations as Hospitalizations,hR.daysOfHospitalization as 'Days of Hospitalization',hR.outpatient as Outpatient,hR.deaths as Deaths FROM healthRegistries hR inner join institutions i on hR.institutionId = i.id inner join periods p on hR.periodId = p.id inner join regions r on i.regionId = r.id inner join diagnosticGroups d on hR.diagnosticGroupId = d.id inner join ageGroups a on hR.ageGroupId = a.id WHERE p.month ="
   sqlCommand += str(month) + " and p.year=" + str(year) + " and i.id=" + str(institutionId) + " ORDER BY d.code,a.minimumAge desc,hR.gender desc"
 
   data = handler.queryForHTML(sqlCommand)
@@ -98,6 +61,42 @@ def diagnosticsByInstitution():
   info = "Diagnostics of the institution " + institutions + "in the date of " + str(month) + ' ' + str(year)
 
   return render_template('search.html',sql=data,querys=querys,info=info)
+
+@app.route("/institutionsByDeaths")
+def institutionsByDeaths():
+  handler = DBHandler.DBHandler()
+
+  sqlCommand = """
+  select i.name as Institution, r.name as Region, sum(hr.deaths) as 'Total Deaths'
+  from institutions i join regions r on i.regionId = r.id
+  join healthRegistries hr on hr.institutionId = i.id
+  group by i.name, r.name
+  order by sum(hr.deaths) desc;
+  """
+
+  data = handler.queryForHTML(sqlCommand)
+
+  info = "Institutions order by Deaths"
+
+  return render_template('search.html',sql=data,info=info)
+
+@app.route("/regionsByDeaths")
+def regionsByDeath():
+  handler = DBHandler.DBHandler()
+
+  sqlCommand = """
+  select r.name, sum(hr.deaths) as 'TotalDeaths'
+  from institutions i join regions r on i.regionId = r.id
+  join healthRegistries hr on hr.institutionId = i.id
+  group by r.name
+  order by sum(hr.deaths) desc;
+  """
+
+  data = handler.queryForHTML(sqlCommand)
+
+  info = "Regions order by Deaths"
+
+  return render_template('search.html',sql=data,info=info)
 
 
 @app.route("/")
