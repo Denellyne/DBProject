@@ -28,7 +28,7 @@ def institutions():
   queryList = [query]
   querys = addSubmit("institutions",queryList)
 
-  info = "Institutions in the region of " + info
+  info = "Institutions in the Region of: " + info
 
   return render_template('search.html',sql=data,querys=querys,info=info)
 
@@ -58,7 +58,7 @@ def diagnosticsByInstitution():
 
 
   querys = addSubmit("diagnosticsByInstitution",queryList)
-  info = "Diagnostics of the institution " + institutions + "in the date of " + str(month) + ' ' + str(year)
+  info = "Diagnostics of the Institution: " + institutions + ", in the date of: " + str(month) + '-' + str(year)
 
   return render_template('search.html',sql=data,querys=querys,info=info)
 
@@ -76,7 +76,7 @@ def institutionsByDeaths():
 
   data = handler.queryForHTML(sqlCommand)
 
-  info = "Institutions order by Deaths"
+  info = "Institutions Ordered by Total Deaths"
 
   return render_template('search.html',sql=data,info=info)
 
@@ -94,7 +94,7 @@ def regionsByDeath():
 
   data = handler.queryForHTML(sqlCommand)
 
-  info = "Regions order by Deaths"
+  info = "Regions Ordered by Total Deaths"
 
   return render_template('search.html',sql=data,info=info)
 
