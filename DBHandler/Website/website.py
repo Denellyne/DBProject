@@ -24,7 +24,7 @@ def institutions():
 
 
   data = handler.queryForHTML(sqlCommand)
-  query,info = addQuerySelector("region","Choose a Region ",handler.query("Select * FROM regions"),institutionId)
+  query,info = addQuerySelector("region",handler.query("Select * FROM regions"),institutionId)
   queryList = [query]
   querys = addSubmit("institutions",queryList)
 
@@ -48,12 +48,12 @@ def diagnosticsByInstitution():
   sqlCommand += str(month) + " and p.year=" + str(year) + " and i.id=" + str(institutionId) + " ORDER BY d.code,a.minimumAge desc,hR.gender desc"
 
   data = handler.queryForHTML(sqlCommand)
-  query,institutions = addQuerySelector("institution","Choose a Institution ",handler.query("Select i.id,i.name FROM institutions i"),institutionId)
+  query,institutions = addQuerySelector("institution",handler.query("Select i.id,i.name FROM institutions i"),institutionId)
   queryList = [query]
 
-  query,_ = addQuerySelector("month","Choose a month ",handler.query("Select p.month,p.month FROM periods p Group by p.month"),month)
+  query,_ = addQuerySelector("month",handler.query("Select p.month,p.month FROM periods p Group by p.month"),month)
   queryList.append(query)
-  query,_ = addQuerySelector("year","Choose a year ",handler.query("Select p.year,p.year FROM periods p Group by p.year"),int(year)-2015)
+  query,_ = addQuerySelector("year",handler.query("Select p.year,p.year FROM periods p Group by p.year"),int(year)-2015)
   queryList.append(query)
 
 

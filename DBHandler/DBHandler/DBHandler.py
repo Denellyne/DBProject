@@ -63,15 +63,15 @@ class DBHandler:
     names = [description[0] for description in self._cursor.description]
     if len(data) == 0: return None
 
-    result = '<table border="1"><tr>'
+    result = '<table class="styled-table""><thead><tr>'
     for val in names:
       result +=  '<th>'+val+'</th>'
-    result += '</tr>'
+    result += '</thead></tr><tbody>'
     for values in data:
       result += '<tr>'
       for val in values:
         result +=  '<td>'+str(val)+'</td>'
-      result += '</tr>'
+      result += '</tbody></tr>'
 
     return result
 

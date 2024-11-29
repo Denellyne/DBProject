@@ -8,13 +8,6 @@
 </font>
 
 
-<label id="inputQuery" for="query">
-  <h3>Input your own SQL Command</h3>
-  <form method=post action=/search>
-    <textarea name=sql></textarea>
-    <input type=submit name=save value=Execute>
-  </form>
-</label>
 <h3>Some database statistics</h3>
 
 <table class="styled-table">
@@ -52,99 +45,22 @@
 </tbody>
 </table>
 
-<table>
-  <th>Useful data</th>
-<tr>
-  <td><a href="/institutions">See Institutions by Regions</a></td>
-</tr>
-<tr>
-  <td><a href="/diagnosticsByInstitution">Diagnostics by Institution and Period</a></td>
-</tr>
+<nav class="container">
+  <a class="styled" href="/institutions">See Institutions by Regions</a><br>
+  <a class="styled" href="/diagnosticsByInstitution">Diagnostics by Institution and Period</a>
+</nav>
 
-</table>
+
 
 {% endblock %}
 
 <!--
-<tr>
-  <td>Actors in movies</td>
-  <td>{{ stats.n_actors }}</td>
-</tr>
-<tr>
-  <td>Movie genres</td>
-  <td>{{ stats.n_genres }}</td>
-</tr>
-<tr>
-  <td>Streams</td>
-  <td>{{ stats.n_streams }}</td>
-</tr>
-<tr>
-  <td>Customers</td>
-  <td>{{ stats.n_customers }}</td>
-</tr>
-<tr>
-  <td>Countries</td>
-  <td>{{ stats.n_countries }}</td>
-</tr>
-<tr>
-  <td>Regions</td>
-  <td>{{ stats.n_regions }}</td>
-</tr>
-</table>
 
-
-
-<h2>Sample functionality</h2>
-
-<h3>Movies</h3>
-<p>
-   <a href="/movies">List all</a>
-</p>
-<p>Get movie info:
-<form name="mid" action="javascript:window.open('/movies/'+document.forms['mid'].elements['id'].value,'_self')">
-   Movie Id:<input value="123" name="id" type="number" min="1"/><input type="submit" value="get"/>
-</form>
-</p>
-  
-<p>Search by title:
-<form name="msearch" action="javascript:window.open('/movies/search/'+document.forms['msearch'].elements['expr'].value,'_self')">
-  <input name="expr" id="expr" value="Spider" required/>
-  <input type="submit" value="search"/>
-</form>
-</p>
-
-<h3>Actors</h3>
-<p>
-   <a href="/actors">List all</a>
-</p>
-<p>Get actor info:
-<form name="aid" action="javascript:window.open('/actors/'+document.forms['aid'].elements['id'].value,'_self')">
-   Actor Id:<input value="123" name="id" type="number" min="1"/><input type="submit" value="get"/>
-</form>
-</p>
-  
-<p>Search by name (prone to <a href="https://en.wikipedia.org/wiki/SQL_injection">SQL injection</a>!)
-  <form name="asearch" action="javascript:window.open('/actors/search/'+document.forms['asearch'].elements['expr'].value,'_self')">
-    <input name="expr" id="expr" value="Tom" required/>
-    <input type="submit" value="search"/>
+<label id="inputQuery" for="query">
+  <h3>Input your own SQL Command</h3>
+  <form method=post action=/search>
+    <textarea name=sql></textarea>
+    <input type=submit name=save value=Execute>
   </form>
-</p>
-
-<h3>Genres</h3>
-<p>
-   <a href="/genres">List all</a>
-</p>
-
-<p>Get genre info:
-<form name="gid" action="javascript:window.open('/genres/'+document.forms['gid'].elements['id'].value,'_self')">
-   Genre Id:<input value="1" name="id" type="number" min="1"/><input type="submit" value="get"/>
-</form>
-</p>
-
-<h3>Staff</h3>
-<p>
-   <a href="/staff">List all</a>
-</p>
-
+</label>
 -->
-
