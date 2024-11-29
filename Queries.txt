@@ -1,0 +1,27 @@
+------  MAX  --------
+-- Institutions com maior numero de obitos
+select i.name, r.name, sum(hr.deaths) as 'TotalDeaths'
+from institutions i join regions r on i.regionId = r.id
+join healthRegistries hr on hr.institutionId = i.id
+group by i.name, r.name
+order by sum(hr.deaths) desc;
+
+-- Regions com maior numero de obitos
+select r.name, sum(hr.deaths) as 'TotalDeaths'
+from institutions i join regions r on i.regionId = r.id
+join healthRegistries hr on hr.institutionId = i.id
+group by r.name
+order by sum(hr.deaths) desc;
+
+-- Institutions com maior numero de internamentos e duracao media de cada internamento
+select i.name, r.name, sum(hr.hospitalizations) as 'TotalHospitalizations', ifnull(avg(hr.daysofhospitalization / hr.hospitalizations), 0) as 'AverageHospitalizationTimePerHosp'
+from institutions i join regions r on i.regionId = r.id
+join healthRegistries hr on hr.institutionId = i.id
+group by i.name, r.name
+order by TotalHospitalizations desc, AverageHospitalizationTimePerHosp desc;
+
+-- Diagnostic Groups - total num de internamentos e obitos
+select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizationsPerGroup', sum(hr.deaths) as 'TotalDeathsPerGroup'
+from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticgroupId
+group by dg.description
+order by TotalHospitalizationsPerGroup desc, TotalDeathsPerGroup desc;
