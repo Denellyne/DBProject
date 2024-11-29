@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Informação Mensal de cada hospital Português sobre morbilidade e mortalidade</h1>
+<h1>Monthly data of every portuguese hospital about mortality</h1>
 
-<h2>Acerca</h2>
-<font size="3">Dados adquiridos apartir do Ministério de Saúde, distinguidos por categoria clínica e faixa etária
+<h2>About</h2>
+<font size="3">Data acquired from Ministry of Health,grouped by diagnostic type and age group
 </font>
 
 
@@ -48,7 +48,17 @@
 </tr>
 </table>
 
-<a href="/institutions">See Institutions by Regions</a>
+<table>
+  <th>Useful data</th>
+<tr>
+  <td><a href="/institutions">See Institutions by Regions</a></td>
+</tr>
+<tr>
+  <td><a href="/diagnosticsByInstitution">Diagnostics by Institution and Period</a></td>
+</tr>
+
+</table>
+
 {% endblock %}
 
 <!--

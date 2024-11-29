@@ -2,11 +2,16 @@
 body {
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1;
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: rgb(220, 220, 255);
+  background-color: rgb(193, 193, 235);
   padding: 30px; }
+
+  
+  label,input {
+    line-height: 1.6;
+  }
 
 body > *:first-child {
   margin-top: 0 !important; }
@@ -309,7 +314,6 @@ kbd {
 }
 @media screen and (min-width: 914px) {
     body {
-        width: 854px;
         margin:0 auto;
     }
 }
