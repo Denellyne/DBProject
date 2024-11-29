@@ -17,11 +17,14 @@
 </label>
 <h3>Some database statistics</h3>
 
-<table>
+<table class="styled-table">
+  <thead>
 <tr>
   <th>Items</th>
   <th>Count</th>
 </tr>
+</thead>
+<tbody>
 <tr>
   <td>Age Groups</td>
   <td>{{ stats[0] }}</td>
@@ -46,6 +49,7 @@
   <td>Health Registries</td>
   <td>{{ stats[5] }}</td>
 </tr>
+</tbody>
 </table>
 
 <table>
