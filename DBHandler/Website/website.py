@@ -224,6 +224,38 @@ def diagnosisGroupMostHospitalizationsPerMonthOfGivenYear():
     return render_template('search.html', sql=data, querys=querys, info=info)
 
 
+@app.post("/mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup")
+@app.route("/mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup")
+def mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup():
+    ageGroupid = 1
+    year = 2020
+
+    if (request.method == 'POST'):
+        ageGroupid = request.form["group"]
+        year = request.form["year"]
+
+    handler = DBHandler.DBHandler()
+    sqlCommand = "with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeaths', p.month, p.year, ag.minimumAge, ag.maximumAge from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId join periods p on p.id = hr.periodId join ageGroups ag on ag.id=hr.ageGroupId where p.year = "
+    sqlCommand += str(year) + " and ag.id = " + str(ageGroupid) + \
+        " group by dg.description, p.month, p.year, ag.minimumAge, ag.maximumAge) select month as 'Month', year as 'Year', description as 'Diagnosis Group', (minimumAge || ' - ' || maximumAge) as 'Age Range', max(TotalDeaths) as 'Total Deaths' from allInfoPerMonthYear group by month, year order by month, year;"
+
+    data = handler.queryForHTML(sqlCommand)
+    query, ageGroup = addQuerySelector("group", handler.query(
+        "select ag.id, (ag.minimumAge || ' - ' || ag.maximumAge) from ageGroups ag"), ageGroupid)
+    queryList = [query]
+
+    query, _ = addQuerySelector("year", handler.query(
+        "select p.year, p.year from periods p group by p.year"), int(year) - 2015)
+    queryList.append(query)
+
+    querys = addSubmit(
+        "mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup", queryList)
+    info = "Most Fatal Diagnosis Groups per Month in the Year: " + \
+        str(year) + ", for the Age Group: " + ageGroup
+
+    return render_template('search.html', sql=data, querys=querys, info=info)
+
+
 # HOME PAGE
 @app.route("/")
 def index():
