@@ -55,7 +55,7 @@ group by dg.description, p.month, p.year)
 select month, year, description, max(TotalDeaths) as 'TotalDeaths'
 from allInfoPerMonthYear
 group by month, year
-order by month, year;
+order by month, year;  DONE! :)
 
 --8. doenca mais internamentos (most hospitalizations) por mes de um dado ano
 with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysofHospitalization) as 'DaysHosp', p.month, p.year

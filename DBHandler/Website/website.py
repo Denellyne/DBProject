@@ -140,6 +140,7 @@ def diagnosisGroupsByDeathsAndHospitalizations():
     info = "Diagnosis Groups Ordered by Total Deaths and Hospitalizations"
     return render_template('search.html', sql=data, info=info)
 
+
 @app.route("/morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup")
 def morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup():
     handler = DBHandler.DBHandler()
@@ -154,7 +155,8 @@ def morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup():
     data = handler.queryForHTML(sqlCommand)
     info = "Diagnosis Groups for each Age Group Ordered by Total Deaths and Hospitalizations"
     return render_template('search.html', sql=data, info=info)
-    
+
+
 @app.route("/mostFatalDiagnosisGroupPerAgeGroup")
 def mostFatalDiagnosisGroupPerAgeGroup():
     handler = DBHandler.DBHandler()
@@ -176,6 +178,29 @@ def mostFatalDiagnosisGroupPerAgeGroup():
     return render_template('search.html', sql=data, info=info)
 
 
+@app.post("/mostFatalDiagnosisGroupPerMonthOfGivenYear")
+@app.route("/mostFatalDiagnosisGroupPerMonthOfGivenYear")
+def mostFatalDiagnosisGroupPerMonthOfGivenYear():
+    year = 2020
+    if (request.method == 'POST'):
+        year = request.form["year"]
+
+    handler = DBHandler.DBHandler()
+    sqlCommand = "with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeaths', p.month, p.year from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId join periods p on p.id = hr.periodId where p.year = "
+    sqlCommand += str(year) + " group by dg.description, p.month, p.year) select month as 'Month', year as 'Year', description as 'Diagnosis Group', max(TotalDeaths) as 'Total Deaths' from allInfoPerMonthYear group by month, year order by month, year;"
+
+    data = handler.queryForHTML(sqlCommand)
+    query, _ = addQuerySelector("year", handler.query(
+        "select p.year, p.year from periods p group by p.year"), int(year) - 2015)
+    queryList = [query]
+
+    querys = addSubmit("mostFatalDiagnosisGroupPerMonthOfGivenYear", queryList)
+    info = "Most Fatal Diagnosis Groups per Month for the Year: " + str(year)
+
+    return render_template('search.html', sql=data, querys=querys, info=info)
+
+
+# HOME PAGE
 @app.route("/")
 def index():
     handler = DBHandler.DBHandler()

@@ -110,8 +110,9 @@ body>*:last-child {
 } 
 
 .container {
-  display: flex;
-  gap: 0.625%;
+  display: grid;
+  grid-template-columns: 300px 300px 300px;
+  gap: 1em;
 }
 
 .home {
