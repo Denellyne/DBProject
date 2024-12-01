@@ -44,3 +44,15 @@ select description, minimumAge, maximumAge, max(TotalDeaths) as 'TotalDeaths'
 from deathsPerGroupAndDoenca
 group by minimumAge, maximumAge
 order by TotalDeaths desc
+
+-- doenca mais grave (most deaths) por mes de um dado ano
+with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeaths', p.month, p.year
+from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
+join periods p on p.id = hr.periodId
+where p.year = ?
+group by dg.description, p.month, p.year)
+
+select description, max(TotalDeaths) as 'TotalDeaths', month, year
+from allInfoPerMonthYear
+group by month, year
+order by month, year
