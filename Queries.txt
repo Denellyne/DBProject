@@ -32,3 +32,15 @@ from healthRegistries hr join diagnosticGroups dg on hr.diagnosticGroupId = dg.i
 join ageGroups ag on ag.id = hr.ageGroupId
 group by dg.description, ag.minimumAge, ag.maximumAge
 order by dg.description, ag.minimumAge;
+
+-- doenca mais grave (most deaths) per age group
+with deathsPerGroupAndDoenca as (select dg.description, ag.minimumAge, ag.maximumAge, sum(hr.deaths) as 'TotalDeaths'
+from healthRegistries hr join diagnosticGroups dg on hr.diagnosticGroupId = dg.id
+join ageGroups ag on ag.id = hr.ageGroupId
+group by dg.description, ag.minimumAge, ag.maximumAge
+order by dg.description, ag.minimumAge)
+
+select description, minimumAge, maximumAge, max(TotalDeaths) as 'TotalDeaths'
+from deathsPerGroupAndDoenca
+group by minimumAge, maximumAge
+order by TotalDeaths desc
