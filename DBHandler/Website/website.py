@@ -21,6 +21,7 @@ def institutions():
 
   sqlCommand = "SELECT institutions.name as Institution,regions.name as Region FROM institutions inner join regions on institutions.regionId = regions.id WHERE regionId ="
   sqlCommand += str(institutionId)
+  sqlCommand += " ORDER BY Institution"
 
 
   data = handler.queryForHTML(sqlCommand)
