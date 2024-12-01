@@ -83,6 +83,12 @@ body {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+.select-items div:hover:first-child, .same-as-selected {
+  border-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.1);
+  
+}
+
 label,
 input {
   line-height: 0.3;
