@@ -27,7 +27,7 @@ group by dg.description
 order by TotalHospitalizationsPerGroup desc, TotalDeathsPerGroup desc;
 
 --5. morbilidade e mortalidade de cada AgeGroup para cada Diagnostic group
-select dg.description, ag.minimumAge, ag.maximumAge, sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.deaths) as 'TotalDeaths'
+select dg.description, (ag.minimumAge || ' - ' || ag.maximumAge) as 'AgeRange', sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.deaths) as 'TotalDeaths'
 from healthRegistries hr join diagnosticGroups dg on hr.diagnosticGroupId = dg.id
 join ageGroups ag on ag.id = hr.ageGroupId
 group by dg.description, ag.minimumAge, ag.maximumAge
@@ -40,19 +40,19 @@ join ageGroups ag on ag.id = hr.ageGroupId
 group by dg.description, ag.minimumAge, ag.maximumAge
 order by dg.description, ag.minimumAge)
 
-select description, minimumAge, maximumAge, max(TotalDeaths) as 'TotalDeaths'
+select (minimumAge || ' - ' || maximumAge) as 'AgeRange', description, max(TotalDeaths) as 'TotalDeaths'
 from deathsPerGroupAndDoenca
-group by minimumAge, maximumAge
-order by TotalDeaths desc
+group by AgeRange
+order by minimumAge;
 
 --7. doenca mais grave (most deaths) por mes de um dado ano
 with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeaths', p.month, p.year
 from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
 join periods p on p.id = hr.periodId
-where p.year = ?
+where p.year = 2016
 group by dg.description, p.month, p.year)
 
-select description, max(TotalDeaths) as 'TotalDeaths', month, year
+select month, year, description, max(TotalDeaths) as 'TotalDeaths'
 from allInfoPerMonthYear
 group by month, year
 order by month, year;
@@ -61,11 +61,23 @@ order by month, year;
 with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizations', p.month, p.year
 from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
 join periods p on p.id = hr.periodId
-where p.year = ?
+where p.year = 2017
 group by dg.description, p.month, p.year)
 
-select description, max(TotalHospitalizations) as 'TotalHospitalizations', month, year
+select  month, year, description, max(TotalHospitalizations) as 'TotalHospitalizations'
 from allInfoPerMonthYear
 group by month, year
 order by month, year;
 
+--9. doenca mais grave (most deaths) por mes de um dado ano e de uma dada faixa etaria (age group)
+with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeaths', p.month, p.year, ag.minimumAge, ag.maximumAge
+from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
+join periods p on p.id = hr.periodId
+join ageGroups ag on ag.id=hr.ageGroupId
+where p.year = 2018 and ag.minimumAge = 65
+group by dg.description, p.month, p.year, ag.minimumAge, ag.maximumAge)
+
+select month, year, description, (minimumAge || ' - ' || maximumAge) as 'AgeRange', max(TotalDeaths) as 'TotalDeaths'
+from allInfoPerMonthYear
+group by month, year
+order by month, year;
