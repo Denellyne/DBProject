@@ -155,6 +155,25 @@ def morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup():
     info = "Diagnosis Groups for each Age Group Ordered by Total Deaths and Hospitalizations"
     return render_template('search.html', sql=data, info=info)
     
+@app.route("/mostFatalDiagnosisGroupPerAgeGroup")
+def mostFatalDiagnosisGroupPerAgeGroup():
+    handler = DBHandler.DBHandler()
+
+    sqlCommand = '''
+  with deathsPerGroupAndDoenca as (select dg.description, ag.minimumAge, ag.maximumAge, sum(hr.deaths) as 'TotalDeaths'
+  from healthRegistries hr join diagnosticGroups dg on hr.diagnosticGroupId = dg.id
+  join ageGroups ag on ag.id = hr.ageGroupId
+  group by dg.description, ag.minimumAge, ag.maximumAge
+  order by dg.description, ag.minimumAge)
+
+  select (minimumAge || ' - ' || maximumAge) as 'AgeRange', description as 'Diagnosis Group', max(TotalDeaths) as 'TotalDeaths'
+  from deathsPerGroupAndDoenca
+  group by AgeRange
+  order by minimumAge;
+  '''
+    data = handler.queryForHTML(sqlCommand)
+    info = "Most Fatal Diagnosis Group in each Age Group"
+    return render_template('search.html', sql=data, info=info)
 
 
 @app.route("/")

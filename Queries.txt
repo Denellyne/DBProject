@@ -43,7 +43,7 @@ order by dg.description, ag.minimumAge)
 select (minimumAge || ' - ' || maximumAge) as 'AgeRange', description, max(TotalDeaths) as 'TotalDeaths'
 from deathsPerGroupAndDoenca
 group by AgeRange
-order by minimumAge;
+order by minimumAge;   DONE! :)
 
 --7. doenca mais grave (most deaths) por mes de um dado ano
 with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeaths', p.month, p.year
