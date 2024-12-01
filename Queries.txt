@@ -27,7 +27,7 @@ group by dg.description
 order by sum(hr.hospitalizations) desc, sum(hr.deaths) desc;  DONE! :)
 
 --5. morbilidade e mortalidade de cada AgeGroup para cada Diagnostic group
-select dg.description, (ag.minimumAge || ' - ' || ag.maximumAge) as 'AgeRange', sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.deaths) as 'TotalDeaths'
+select dg.description, (ag.minimumAge || ' - ' || ag.maximumAge) as 'Age Range', sum(hr.hospitalizations) as 'Total Hospitalizations', sum(hr.deaths) as 'Total Deaths'
 from healthRegistries hr join diagnosticGroups dg on hr.diagnosticGroupId = dg.id
 join ageGroups ag on ag.id = hr.ageGroupId
 group by dg.description, ag.minimumAge, ag.maximumAge
