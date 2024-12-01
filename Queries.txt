@@ -21,10 +21,10 @@ group by i.name, r.name
 order by sum(hr.hospitalizations) desc, round(avg(hr.daysofhospitalization / hr.hospitalizations), 1) desc; DONE! :)
 
 --4. Diagnostic Groups - total num de internamentos e obitos
-select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizationsPerGroup', sum(hr.deaths) as 'TotalDeathsPerGroup'
+select dg.description as 'Diagnosis Group', sum(hr.hospitalizations) as 'Total Hospitalizations Per Diagnostic Group', sum(hr.deaths) as 'Total Deaths Per Diagnosis Group'
 from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticgroupId
 group by dg.description
-order by TotalHospitalizationsPerGroup desc, TotalDeathsPerGroup desc;
+order by sum(hr.hospitalizations) desc, sum(hr.deaths) desc;  DONE! :)
 
 --5. morbilidade e mortalidade de cada AgeGroup para cada Diagnostic group
 select dg.description, (ag.minimumAge || ' - ' || ag.maximumAge) as 'AgeRange', sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.deaths) as 'TotalDeaths'

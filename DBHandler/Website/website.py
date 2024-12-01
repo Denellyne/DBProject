@@ -65,7 +65,7 @@ def diagnosticsByInstitution():
     queryList.append(query)
 
     querys = addSubmit("diagnosticsByInstitution", queryList)
-    info = "Diagnostics of the Institution: " + institutions + \
+    info = "Diagnosis Groups from the Institution: " + institutions + \
         ", in the date of: " + str(month) + '-' + str(year)
 
     return render_template('search.html', sql=data, querys=querys, info=info)
@@ -125,6 +125,21 @@ def institutionsByHospitalizations():
     info = "Institutions Ordered by Total Hospitalizations"
     return render_template('search.html', sql=data, info=info)
 
+
+@app.route("/diagnosticsByDeathsAndHospitalizations")
+def diagnosticsDeathsAndHospitalizations():
+    handler = DBHandler.DBHandler()
+
+    sqlCommand = '''
+  select dg.description as 'Diagnosis Group', sum(hr.hospitalizations) as 'Total Hospitalizations Per Diagnostic Group', sum(hr.deaths) as 'Total Deaths Per Diagnosis Group'
+  from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticgroupId
+  group by dg.description
+  order by sum(hr.hospitalizations) desc, sum(hr.deaths) desc;
+  '''
+    data = handler.queryForHTML(sqlCommand)
+    info = "Diagnosis Groups Ordered by Total Deaths and Hospitalizations"
+    return render_template('search.html', sql=data, info=info)
+    
 
 
 @app.route("/")
