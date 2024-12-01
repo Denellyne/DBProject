@@ -61,13 +61,13 @@ order by month, year;  DONE! :)
 with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysofHospitalization) as 'DaysHosp', p.month, p.year
 from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
 join periods p on p.id = hr.periodId
-where p.year = ?
+where p.year = 2016
 group by dg.description, p.month, p.year)
 
-select  month, year, description, max(TotalHospitalizations) as 'TotalHospitalizations', (DaysHosp * 1.0 / TotalHospitalizations *1.0) as 'AverageTimeInHospitalPerCase'
+select  month as 'Month', year as 'Year', description as 'Diagnosis Group', max(TotalHospitalizations) as 'Total Hospitalizations', (ifnull(round((DaysHosp * 1.0 / TotalHospitalizations *1.0), 1),0) || ' day/s') as 'Average Hospitalization Time Per Case'
 from allInfoPerMonthYear
 group by month, year
-order by month, year;
+order by month, year;   DONE! :)
 
 --9. doenca mais grave (most deaths) por mes de um dado ano e de uma dada faixa etaria (age group)
 with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeaths', p.month, p.year, ag.minimumAge, ag.maximumAge

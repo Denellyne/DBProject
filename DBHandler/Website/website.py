@@ -195,7 +195,31 @@ def mostFatalDiagnosisGroupPerMonthOfGivenYear():
     queryList = [query]
 
     querys = addSubmit("mostFatalDiagnosisGroupPerMonthOfGivenYear", queryList)
-    info = "Most Fatal Diagnosis Groups per Month for the Year: " + str(year)
+    info = "Most Fatal Diagnosis Groups per Month in the Year: " + str(year)
+
+    return render_template('search.html', sql=data, querys=querys, info=info)
+
+
+@app.post("/diagnosisGroupMostHospitalizationsPerMonthOfGivenYear")
+@app.route("/diagnosisGroupMostHospitalizationsPerMonthOfGivenYear")
+def diagnosisGroupMostHospitalizationsPerMonthOfGivenYear():
+    year = 2020
+    if (request.method == 'POST'):
+        year = request.form["year"]
+
+    handler = DBHandler.DBHandler()
+    sqlCommand = "with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysofHospitalization) as 'DaysHosp', p.month, p.year from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId join periods p on p.id = hr.periodId where p.year = "
+    sqlCommand += str(year) + " group by dg.description, p.month, p.year) select  month as 'Month', year as 'Year', description as 'Diagnosis Group', max(TotalHospitalizations) as 'Total Hospitalizations', (ifnull(round((DaysHosp * 1.0 / TotalHospitalizations *1.0), 1),0) || ' day/s') as 'Average Hospitalization Time Per Case' from allInfoPerMonthYear group by month, year order by month, year;"
+
+    data = handler.queryForHTML(sqlCommand)
+    query, _ = addQuerySelector("year", handler.query(
+        "select p.year, p.year from periods p group by p.year"), int(year) - 2015)
+    queryList = [query]
+
+    querys = addSubmit(
+        "diagnosisGroupMostHospitalizationsPerMonthOfGivenYear", queryList)
+    info = "Diagnosis Groups with the Most Hospitalizations per Month in the Year: " + \
+        str(year)
 
     return render_template('search.html', sql=data, querys=querys, info=info)
 
