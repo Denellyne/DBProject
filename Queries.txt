@@ -61,7 +61,7 @@ order by month, year;
 with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysofHospitalization) as 'DaysHosp', p.month, p.year
 from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
 join periods p on p.id = hr.periodId
-where p.year = 2017
+where p.year = ?
 group by dg.description, p.month, p.year)
 
 select  month, year, description, max(TotalHospitalizations) as 'TotalHospitalizations', (DaysHosp * 1.0 / TotalHospitalizations *1.0) as 'AverageTimeInHospitalPerCase'
@@ -74,7 +74,7 @@ with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeat
 from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
 join periods p on p.id = hr.periodId
 join ageGroups ag on ag.id=hr.ageGroupId
-where p.year = 2018 and ag.minimumAge = 65
+where p.year = ? and ag.minimumAge = ?
 group by dg.description, p.month, p.year, ag.minimumAge, ag.maximumAge)
 
 select month, year, description, (minimumAge || ' - ' || maximumAge) as 'AgeRange', max(TotalDeaths) as 'TotalDeaths'
@@ -87,7 +87,7 @@ with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 
 from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
 join periods p on p.id = hr.periodId
 join ageGroups ag on ag.id=hr.ageGroupId
-where p.year = 2020 and ag.minimumAge = 45
+where p.year = ? and ag.minimumAge = ?
 group by dg.description, p.month, p.year, ag.minimumAge, ag.maximumAge)
 
 select month, year, description, (minimumAge || ' - ' || maximumAge) as 'AgeRange', max(TotalHospitalizations) as 'TotalHospitalizations', (DaysHosp * 1.0 / TotalHospitalizations *1.0) as 'AverageTimeInHospitalPerCase'
