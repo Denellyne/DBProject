@@ -56,3 +56,16 @@ select description, max(TotalDeaths) as 'TotalDeaths', month, year
 from allInfoPerMonthYear
 group by month, year
 order by month, year;
+
+--8. doenca mais internamentos (most hospitalizations) por mes de um dado ano
+with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizations', p.month, p.year
+from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
+join periods p on p.id = hr.periodId
+where p.year = ?
+group by dg.description, p.month, p.year)
+
+select description, max(TotalHospitalizations) as 'TotalHospitalizations', month, year
+from allInfoPerMonthYear
+group by month, year
+order by month, year;
+
