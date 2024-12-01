@@ -55,4 +55,4 @@ group by dg.description, p.month, p.year)
 select description, max(TotalDeaths) as 'TotalDeaths', month, year
 from allInfoPerMonthYear
 group by month, year
-order by month, year
+order by month, year;
