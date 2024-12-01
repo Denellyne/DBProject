@@ -83,6 +83,19 @@ body {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+.select-items div:hover:first-child, .same-as-selected {
+  border-start-start-radius: 16px;
+  border-start-end-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.1);
+  
+}
+.select-items div:hover:last-child, .same-as-selected {
+  border-end-end-radius: 16px;
+  border-end-start-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.1);
+  
+}
+
 label,
 input {
   line-height: 0.3;
