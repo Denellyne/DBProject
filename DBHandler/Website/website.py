@@ -64,7 +64,7 @@ def diagnosisGroupsByInstitution():
         "Select p.year,p.year FROM periods p Group by p.year"), int(year)-2015)
     queryList.append(query)
 
-    querys = addSubmit("diagnosticsByInstitution", queryList)
+    querys = addSubmit("diagnosisGroupsByInstitution", queryList)
     info = "Diagnosis Groups from the Institution: " + institutions + \
         ", in the date of: " + str(month) + '-' + str(year)
 
