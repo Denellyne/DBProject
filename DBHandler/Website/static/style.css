@@ -27,6 +27,8 @@ body {
 }
 
 .select-selected {
+  border-radius: 30px;
+
   background-color: #238878;
 }
 
@@ -47,6 +49,8 @@ body {
 .select-selected.select-arrow-active:after {
   border-color: transparent transparent #fff transparent;
   top: 7px;
+  border-radius: 30px;
+
 }
 
 /* style the items (options), including the selected item: */
@@ -61,8 +65,10 @@ body {
 /* Style items (options): */
 .select-items {
   position: absolute;
+  border-radius: 20px;
+  padding-top: 4px;
   background-color: #238878;
-  top: 100%;
+  top: 0%;
   left: 0;
   right: 0;
   z-index: 99;
@@ -97,6 +103,7 @@ body>*:last-child {
 
 .home {
   background-color: #238878;
+  border-radius: 20px;
   color: white;
   padding: 1em 1.5em;
   text-decoration: none;
@@ -116,6 +123,7 @@ body>*:last-child {
 
 .styled {
   background-color: #238878;
+  border-radius: 15px;
   color: white;
   padding: 1em 1.5em;
   text-decoration: none;
