@@ -45,7 +45,7 @@ def diagnosticsByInstitution():
     year = request.form["year"] 
 
   handler = DBHandler.DBHandler()
-  sqlCommand = "SELECT d.description as Description,a.minimumAge,a.maximumAge,i.name as Institution,r.name as Region,p.month as Month,p.year as Year,hR.gender as Gender,hR.hospitalizations as Hospitalizations,hR.daysOfHospitalization as 'Days of Hospitalization',hR.outpatient as Outpatient,hR.deaths as Deaths FROM healthRegistries hR inner join institutions i on hR.institutionId = i.id inner join periods p on hR.periodId = p.id inner join regions r on i.regionId = r.id inner join diagnosticGroups d on hR.diagnosticGroupId = d.id inner join ageGroups a on hR.ageGroupId = a.id WHERE p.month ="
+  sqlCommand = "SELECT d.description as Description,(a.minimumAge || ' - ' || a.maximumAge) as 'Age Range',i.name as Institution,r.name as Region,p.month as Month,p.year as Year,hR.gender as Gender,hR.hospitalizations as Hospitalizations,hR.daysOfHospitalization as 'Days of Hospitalization',hR.outpatient as Outpatient,hR.deaths as Deaths FROM healthRegistries hR inner join institutions i on hR.institutionId = i.id inner join periods p on hR.periodId = p.id inner join regions r on i.regionId = r.id inner join diagnosticGroups d on hR.diagnosticGroupId = d.id inner join ageGroups a on hR.ageGroupId = a.id WHERE p.month ="
   sqlCommand += str(month) + " and p.year=" + str(year) + " and i.id=" + str(institutionId) + " ORDER BY d.code,a.minimumAge desc,hR.gender desc"
 
   data = handler.queryForHTML(sqlCommand)
