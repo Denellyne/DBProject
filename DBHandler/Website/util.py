@@ -6,6 +6,10 @@ def sortAndGetCorrectIdForQuery(query,index):
         i+=1
       return sortedQuery,i
 
+def addInfo(infoToDisplay,numberOfResults):
+   info = "<h3>"+infoToDisplay + "</h3>"+"<h4>Showing " + str(numberOfResults)+ " results"+"</h4>"
+   return info
+
 def addSubmit(endpoint,queryList):
   querys = """
   <form method =post action=/"""

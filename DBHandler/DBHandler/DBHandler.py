@@ -57,11 +57,11 @@ class DBHandler:
       print("Cursor is invalid,aborting...")
       exit()
 
-    if len(input) == 0: return None
+    if len(input) == 0: return None,0
 
     data = self.__queryDatabase(input)
     names = [description[0] for description in self._cursor.description]
-    if len(data) == 0: return None
+    if len(data) == 0: return None,0
 
     result = '<table class="styled-table""><thead><tr>'
     for val in names:
@@ -73,7 +73,7 @@ class DBHandler:
         result +=  '<td>'+str(val)+'</td>'
       result += '</tbody></tr>'
 
-    return result
+    return result,len(data)
 
   def query(self,input : str):
     if(self._cursor is None):
