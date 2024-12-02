@@ -116,3 +116,13 @@ select Year, Region, TotalHospitalizations as 'Total Hospitalizations', (round((
 from info
 order by TotalHospitalizations desc;   DONE! :)
 
+-- 13. hospitalizations per year for given institution (and average hospitalization time per case)
+with info as (select p.year, i.name, sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysOfHospitalization) as 'TotalDays'
+from healthRegistries hr join periods p on hr.periodId=p.id
+join institutions i on i.id=hr.institutionId
+where i.id = ?
+group by p.year, i.name)
+
+select year as 'Year', name as 'Institution', TotalHospitalizations as 'Total Hospitalizations', (round((totalDays *1.0 / TotalHospitalizations *1.0),1) || ' day/s') as 'Average Time In Hospital Per Case'
+from info
+order by year;
