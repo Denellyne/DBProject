@@ -94,9 +94,3 @@ from allInfoPerMonthYear
 group by month, year
 order by month, year;
 
---11. regions by total hospitalizations
-select r.name as 'Region', sum(hr.hospitalizations) as 'Total Hospitalizations'
-from regions r join institutions i on r.id=i.regionId
-join healthRegistries hr on hr.institutionId=i.id
-group by r.name
-order by sum(hr.hospitalizations) desc;
