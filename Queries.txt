@@ -102,7 +102,7 @@ group by r.name)
 
 select Region, TotalHospitalizations as 'Total Hospitalizations', (round((totalDays *1.0 / TotalHospitalizations *1.0),1) || ' day/s') as 'Average Time In Hospital Per Case'
 from info
-order by TotalHospitalizations desc;
+order by TotalHospitalizations desc;  DONE! :)
 
 -- 12. regions by total hospitalizations for a given year
 with info as (select p.year as 'Year', r.name as 'Region', sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysOfHospitalization) as 'TotalDays'

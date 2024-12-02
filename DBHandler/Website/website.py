@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from DBHandler import DBHandler
-from Website.util import addSubmit, addQuerySelector,sortAndGetCorrectIdForQuery,addInfo
+from Website.util import addSubmit, addQuerySelector, sortAndGetCorrectIdForQuery, addInfo
 
 app = Flask(__name__)
 
@@ -25,16 +25,14 @@ def institutions():
     sqlCommand += str(institutionId)
     sqlCommand += " ORDER BY Institution"
 
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
     query, info = addQuerySelector("region", handler.query(
         "Select * FROM regions"), institutionId)
     queryList = [query]
     querys = addSubmit("institutions", queryList)
 
-
-
     info = "Institutions in the Region of: " + info
-    return render_template('search.html', sql=data, querys=querys, info=addInfo(info,results))
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
 @app.post("/diagnosisGroupsByInstitution")
@@ -53,7 +51,7 @@ def diagnosisGroupsByInstitution():
     sqlCommand += str(month) + " and p.year=" + str(year) + " and i.id=" + \
         str(institutionId) + " ORDER BY d.code,a.minimumAge desc,hR.gender desc"
 
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
 
     query, institutions = addQuerySelector("institution", handler.query(
         "Select i.id,i.name FROM institutions i"), institutionId)
@@ -70,7 +68,7 @@ def diagnosisGroupsByInstitution():
     info = "Diagnosis Groups from the Institution: " + institutions + \
         ", in the date of: " + str(month) + '-' + str(year)
 
-    return render_template('search.html', sql=data, querys=querys, info=addInfo(info,results))
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
 @app.route("/institutionsByDeaths")
@@ -85,11 +83,11 @@ def institutionsByDeaths():
   order by sum(hr.deaths) desc;
   """
 
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
 
     info = "Institutions Ordered by Total Deaths"
 
-    return render_template('search.html', sql=data, info=addInfo(info,results))
+    return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
 @app.route("/regionsByDeaths")
@@ -104,11 +102,11 @@ def regionsByDeath():
   order by sum(hr.deaths) desc;
   """
 
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
 
     info = "Regions Ordered by Total Deaths"
 
-    return render_template('search.html', sql=data, info=addInfo(info,results))
+    return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
 @app.route("/institutionsByHospitalizations")
@@ -123,9 +121,9 @@ def institutionsByHospitalizations():
   order by sum(hr.hospitalizations) desc, round(avg(hr.daysofhospitalization / hr.hospitalizations), 1) desc;
   '''
 
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
     info = "Institutions Ordered by Total Hospitalizations"
-    return render_template('search.html', sql=data, info=addInfo(info,results))
+    return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
 @app.route("/diagnosisGroupsByDeathsAndHospitalizations")
@@ -138,9 +136,9 @@ def diagnosisGroupsByDeathsAndHospitalizations():
   group by dg.description
   order by sum(hr.hospitalizations) desc, sum(hr.deaths) desc;
   '''
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
     info = "Diagnosis Groups Ordered by Total Deaths and Hospitalizations"
-    return render_template('search.html', sql=data, info=addInfo(info,results))
+    return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
 @app.route("/morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup")
@@ -154,9 +152,9 @@ def morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup():
   group by dg.description, ag.minimumAge, ag.maximumAge
   order by dg.description, ag.minimumAge;
   '''
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
     info = "Diagnosis Groups for each Age Group Ordered by Total Deaths and Hospitalizations"
-    return render_template('search.html', sql=data, info=addInfo(info,results))
+    return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
 @app.route("/mostFatalDiagnosisGroupPerAgeGroup")
@@ -175,9 +173,9 @@ def mostFatalDiagnosisGroupPerAgeGroup():
   group by AgeRange
   order by minimumAge;
   '''
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
     info = "Most Fatal Diagnosis Group in each Age Group"
-    return render_template('search.html', sql=data, info=addInfo(info,results))
+    return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
 @app.post("/mostFatalDiagnosisGroupPerMonthOfGivenYear")
@@ -191,7 +189,7 @@ def mostFatalDiagnosisGroupPerMonthOfGivenYear():
     sqlCommand = "with allInfoPerMonthYear as (select dg.description, sum(hr.deaths) as 'TotalDeaths', p.month, p.year from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId join periods p on p.id = hr.periodId where p.year = "
     sqlCommand += str(year) + " group by dg.description, p.month, p.year) select month as 'Month', year as 'Year', description as 'Diagnosis Group', max(TotalDeaths) as 'Total Deaths' from allInfoPerMonthYear group by month, year order by month, year;"
 
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
     query, _ = addQuerySelector("year", handler.query(
         "select p.year, p.year from periods p group by p.year"), int(year) - 2015)
     queryList = [query]
@@ -199,7 +197,7 @@ def mostFatalDiagnosisGroupPerMonthOfGivenYear():
     querys = addSubmit("mostFatalDiagnosisGroupPerMonthOfGivenYear", queryList)
     info = "Most Fatal Diagnosis Groups per Month in the Year: " + str(year)
 
-    return render_template('search.html', sql=data, querys=querys, info=addInfo(info,results))
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
 @app.post("/diagnosisGroupMostHospitalizationsPerMonthOfGivenYear")
@@ -213,7 +211,7 @@ def diagnosisGroupMostHospitalizationsPerMonthOfGivenYear():
     sqlCommand = "with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysofHospitalization) as 'DaysHosp', p.month, p.year from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId join periods p on p.id = hr.periodId where p.year = "
     sqlCommand += str(year) + " group by dg.description, p.month, p.year) select  month as 'Month', year as 'Year', description as 'Diagnosis Group', max(TotalHospitalizations) as 'Total Hospitalizations', (ifnull(round((DaysHosp * 1.0 / TotalHospitalizations *1.0), 1),0) || ' day/s') as 'Average Hospitalization Time Per Case' from allInfoPerMonthYear group by month, year order by month, year;"
 
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
     query, _ = addQuerySelector("year", handler.query(
         "select p.year, p.year from periods p group by p.year"), int(year) - 2015)
     queryList = [query]
@@ -223,7 +221,7 @@ def diagnosisGroupMostHospitalizationsPerMonthOfGivenYear():
     info = "Diagnosis Groups with the Most Hospitalizations per Month in the Year: " + \
         str(year)
 
-    return render_template('search.html', sql=data, querys=querys, info=addInfo(info,results))
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
 @app.post("/mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup")
@@ -241,13 +239,13 @@ def mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup():
     sqlCommand += str(year) + " and ag.id = " + str(ageGroupid) + \
         " group by dg.description, p.month, p.year, ag.minimumAge, ag.maximumAge) select month as 'Month', year as 'Year', description as 'Diagnosis Group', (minimumAge || ' - ' || maximumAge) as 'Age Range', max(TotalDeaths) as 'Total Deaths' from allInfoPerMonthYear group by month, year order by month, year;"
 
-    data,results = handler.queryForHTML(sqlCommand)
+    data, results = handler.queryForHTML(sqlCommand)
     ages = handler.query(
         "select ag.id, (ag.minimumAge || ' - ' || ag.maximumAge) from ageGroups ag")
-    
-    ages,i = sortAndGetCorrectIdForQuery(ages,ageGroupid)
 
-    query, ageGroup = addQuerySelector("group",ages,i)
+    ages, i = sortAndGetCorrectIdForQuery(ages, ageGroupid)
+
+    query, ageGroup = addQuerySelector("group", ages, i)
     queryList = [query]
 
     query, _ = addQuerySelector("year", handler.query(
@@ -259,7 +257,26 @@ def mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup():
     info = "Most Fatal Diagnosis Groups per Month in the Year: " + \
         str(year) + ", for the Age Group: " + ageGroup
 
-    return render_template('search.html', sql=data, querys=querys, info=addInfo(info,results))
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
+
+
+@app.route("/regionsByHospitalizations")
+def regionsByTotalHospitalizations():
+    handler = DBHandler.DBHandler()
+
+    sqlCommand = '''
+    with info as (select r.name as 'Region', sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysOfHospitalization) as 'TotalDays'
+    from regions r join institutions i on r.id=i.regionId
+    join healthRegistries hr on hr.institutionId=i.id
+    group by r.name)
+
+    select Region, TotalHospitalizations as 'Total Hospitalizations', (round((totalDays *1.0 / TotalHospitalizations *1.0),1) || ' day/s') as 'Average Time In Hospital Per Case'
+    from info
+    order by TotalHospitalizations desc;
+  '''
+    data, results = handler.queryForHTML(sqlCommand)
+    info = "Regions Ordered by Total Number of Hospitalizations"
+    return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
 # HOME PAGE
