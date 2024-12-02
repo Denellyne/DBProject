@@ -86,13 +86,13 @@ with allInfoPerMonthYear as (select dg.description, sum(hr.hospitalizations) as 
 from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticGroupId
 join periods p on p.id = hr.periodId
 join ageGroups ag on ag.id=hr.ageGroupId
-where p.year = ? and ag.minimumAge = ?
+where p.year = ? and ag.id = ?
 group by dg.description, p.month, p.year, ag.minimumAge, ag.maximumAge)
 
-select month, year, description, (minimumAge || ' - ' || maximumAge) as 'AgeRange', max(TotalHospitalizations) as 'TotalHospitalizations', (DaysHosp * 1.0 / TotalHospitalizations *1.0) as 'AverageTimeInHospitalPerCase'
+select month as 'Month', year as 'Year', description as 'Diagnosis Group', (minimumAge || ' - ' || maximumAge) as 'Age Range', max(TotalHospitalizations) as 'Total Hospitalizations', (round((DaysHosp * 1.0 / TotalHospitalizations *1.0),1) || ' day/s')as 'Average Time In Hospital Per Case'
 from allInfoPerMonthYear
 group by month, year
-order by month, year;
+order by month, year;     DONE! :)
 
 --11. regions by total hospitalizations
 with info as (select r.name as 'Region', sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysOfHospitalization) as 'TotalDays'
