@@ -338,6 +338,53 @@ def diagnosisGroupMostHospitalizationsPerMonthOfGivenYearAndAgeGroup():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+@app.post("/institutionsHospitalizationsPerYearForGivenInstitution")
+@app.route("/institutionsHospitalizationsPerYearForGivenInstitution")
+def institutionsHospitalizationsPerYearForGivenInstitution():
+    institutionId = 1
+    if (request.method == 'POST'):
+        institutionId = request.form["institution"]
+
+    handler = DBHandler.DBHandler()
+    sqlCommand = "with info as (select p.year, i.name, sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysOfHospitalization) as 'TotalDays' from healthRegistries hr join periods p on hr.periodId=p.id join institutions i on i.id=hr.institutionId where i.id ="
+    sqlCommand += str(institutionId) + " group by p.year, i.name) select year as 'Year', name as 'Institution', TotalHospitalizations as 'Total Hospitalizations', (round((totalDays *1.0 / TotalHospitalizations *1.0),1) || ' day/s') as 'Average Time In Hospital Per Case' from info order by year;"
+
+    data, results = handler.queryForHTML(sqlCommand)
+    query, institutions = addQuerySelector("institution", handler.query(
+        "Select i.id,i.name FROM institutions i"), institutionId)
+    queryList = [query]
+
+    querys = addSubmit(
+        "institutionsHospitalizationsPerYearForGivenInstitution", queryList)
+    info = "Total Number of Hospitalizations per Year in the Institution: " + institutions
+
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
+
+
+@app.post("/institutionsDeathsPerYearForGivenInstitution")
+@app.route("/institutionsDeathsPerYearForGivenInstitution")
+def institutionsDeathsPerYearForGivenInstitution():
+    institutionId = 1
+    if (request.method == 'POST'):
+        institutionId = request.form["institution"]
+
+    handler = DBHandler.DBHandler()
+    sqlCommand = "select p.year as 'Year', i.name as 'Institution', sum(hr.deaths) as 'Total Deaths' from healthRegistries hr join periods p on hr.periodId=p.id join institutions i on i.id=hr.institutionId where i.id ="
+    sqlCommand += str(institutionId) + \
+        " group by p.year, i.name order by p.year;"
+
+    data, results = handler.queryForHTML(sqlCommand)
+    query, institutions = addQuerySelector("institution", handler.query(
+        "Select i.id,i.name FROM institutions i"), institutionId)
+    queryList = [query]
+
+    querys = addSubmit(
+        "institutionsDeathsPerYearForGivenInstitution", queryList)
+    info = "Total Number of Deaths per Year in the Institution: " + institutions
+
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
+
+
 # HOME PAGE
 @app.route("/")
 def index():
