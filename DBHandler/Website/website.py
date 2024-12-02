@@ -279,7 +279,32 @@ def regionsByTotalHospitalizations():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+@app.post("/regionsByHospitalizationsForGivenYear")
+@app.route("/regionsByHospitalizationsForGivenYear")
+def regionsByHospitalizationsForGivenYear():
+    year = 2020
+    if (request.method == 'POST'):
+        year = request.form["year"]
+
+    handler = DBHandler.DBHandler()
+
+    sqlCommand = "with info as (select p.year as 'Year', r.name as 'Region', sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysOfHospitalization) as 'TotalDays' from regions r join institutions i on r.id=i.regionId join healthRegistries hr on hr.institutionId=i.id join periods p on p.id=hr.periodId where p.year = "
+    sqlCommand += str(year) + " group by  p.year, r.name) select Year, Region, TotalHospitalizations as 'Total Hospitalizations', (round((totalDays *1.0 / TotalHospitalizations *1.0),1) || ' day/s') as 'Average Time In Hospital Per Case' from info order by TotalHospitalizations desc;"
+
+    data, results = handler.queryForHTML(sqlCommand)
+    query, _ = addQuerySelector("year", handler.query(
+        "select p.year, p.year from periods p group by p.year"), int(year) - 2015)
+    queryList = [query]
+
+    querys = addSubmit(
+        "regionsByHospitalizationsForGivenYear", queryList)
+    info = "Total Hospitalizations for each Region in the Year: " + str(year)
+
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
+
 # HOME PAGE
+
+
 @app.route("/")
 def index():
     handler = DBHandler.DBHandler()

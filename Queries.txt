@@ -109,10 +109,10 @@ with info as (select p.year as 'Year', r.name as 'Region', sum(hr.hospitalizatio
 from regions r join institutions i on r.id=i.regionId
 join healthRegistries hr on hr.institutionId=i.id
 join periods p on p.id=hr.periodId
-where p.year = 2020
+where p.year = ?
 group by  p.year, r.name)
 
 select Year, Region, TotalHospitalizations as 'Total Hospitalizations', (round((totalDays *1.0 / TotalHospitalizations *1.0),1) || ' day/s') as 'Average Time In Hospital Per Case'
 from info
-order by TotalHospitalizations desc;
+order by TotalHospitalizations desc;   DONE! :)
 
