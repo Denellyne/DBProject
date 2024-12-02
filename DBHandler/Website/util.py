@@ -6,7 +6,7 @@ def addSubmit(endpoint,queryList):
   for query in queryList:
     querys += query +'\n'
 
-  querys += "<input type=submit name=save value=Submit>" + "</form>"
+  querys += "<input class=\"submit-button\" type=submit name=save value=Submit>" + "</form>"
 
   return querys
 

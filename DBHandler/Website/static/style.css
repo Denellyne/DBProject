@@ -101,6 +101,18 @@ input {
   line-height: 0.3;
 }
 
+.submit-button {
+  color: #ffffff;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: #238878;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
 body > *:first-child {
   margin-top: 0 !important;
 }
