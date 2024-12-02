@@ -1,3 +1,11 @@
+def sortAndGetCorrectIdForQuery(query,index):
+      sortedQuery = sorted(query,key=lambda x:int(x[1].split(" ")[0]))
+      i = 1
+      for query in sortedQuery:
+        if(query[0] == int(index)): break
+        i+=1
+      return sortedQuery,i
+
 def addSubmit(endpoint,queryList):
   querys = """
   <form method =post action=/"""

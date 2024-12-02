@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from DBHandler import DBHandler
-from Website.util import addSubmit, addQuerySelector
+from Website.util import addSubmit, addQuerySelector,sortAndGetCorrectIdForQuery
 
 app = Flask(__name__)
 
@@ -240,8 +240,12 @@ def mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup():
         " group by dg.description, p.month, p.year, ag.minimumAge, ag.maximumAge) select month as 'Month', year as 'Year', description as 'Diagnosis Group', (minimumAge || ' - ' || maximumAge) as 'Age Range', max(TotalDeaths) as 'Total Deaths' from allInfoPerMonthYear group by month, year order by month, year;"
 
     data = handler.queryForHTML(sqlCommand)
-    query, ageGroup = addQuerySelector("group", handler.query(
-        "select ag.id, (ag.minimumAge || ' - ' || ag.maximumAge) from ageGroups ag"), ageGroupid)
+    ages = handler.query(
+        "select ag.id, (ag.minimumAge || ' - ' || ag.maximumAge) from ageGroups ag")
+    
+    ages,i = sortAndGetCorrectIdForQuery(ages,ageGroupid)
+
+    query, ageGroup = addQuerySelector("group",ages,i)
     queryList = [query]
 
     query, _ = addQuerySelector("year", handler.query(
