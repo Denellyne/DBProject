@@ -94,3 +94,14 @@ from allInfoPerMonthYear
 group by month, year
 order by month, year;
 
+--11. regions by total hospitalizations
+with info as (select r.name as 'Region', sum(hr.hospitalizations) as 'TotalHospitalizations', sum(hr.daysOfHospitalization) as 'TotalDays'
+from regions r join institutions i on r.id=i.regionId
+join healthRegistries hr on hr.institutionId=i.id
+group by r.name)
+
+select region, TotalHospitalizations as 'Total Hospitalizations', (round((totalDays *1.0 / TotalHospitalizations *1.0),1) || ' day/s') as 'Average Time In Hospital Per Case'
+from info
+order by TotalHospitalizations desc;
+
+
