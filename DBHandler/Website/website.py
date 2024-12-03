@@ -385,8 +385,8 @@ def institutionsDeathsPerYearForGivenInstitution():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
-@app.route("/hospitalizationsPerYearPerGenderEachInstitution")
-def hospitalizationsPerYearPerGenderEachInstitution():
+@app.route("/patientsPerYearPerGenderEachInstitution")
+def patientsPerYearPerGenderEachInstitution():
     handler = DBHandler.DBHandler()
 
     sqlCommand = '''
@@ -398,7 +398,7 @@ def hospitalizationsPerYearPerGenderEachInstitution():
     order by i.name, p.year;
   '''
     data, results = handler.queryForHTML(sqlCommand)
-    info = "Total Number of Hospitalizations per Year in each Institution for each Gender"
+    info = "Total Number of Patients per Year in each Institution for each Gender"
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
