@@ -11,6 +11,13 @@ body {
   align-items: start;
   height: 100vh;
 }
+.wrapper {
+  box-sizing: border-box;
+  position: relative;
+  padding-bottom: 1em; /* Height of footer */
+  min-height: 100%;
+}
+
 
 footer {
   display:flex;
@@ -21,6 +28,9 @@ footer {
   margin-bottom: 10px;
   justify-content:center;
   align-items:center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 .custom-select {

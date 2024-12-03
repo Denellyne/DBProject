@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="wrapper">
 
 <h1>Search Results</h1>
-
 
 
 {{info|safe}}
@@ -11,9 +11,6 @@
 {{ sql|safe }}
 
 {{ querys|safe }}
-
-
-
 <script>
   var x, i, j, l, ll, selElmnt, a, b, c;
   /*look for any elements with the class "custom-select":*/
@@ -95,11 +92,15 @@
   document.addEventListener("click", closeAllSelect);
   </script>
 
-
-
 {% endblock %}
 
-{% block foot %}
-{% endblock %}
+</div>
+
+
+
+
+
+
+
 
 
