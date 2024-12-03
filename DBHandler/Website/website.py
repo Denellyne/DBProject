@@ -390,7 +390,7 @@ def hospitalizationsPerYearPerGenderEachInstitution():
     handler = DBHandler.DBHandler()
 
     sqlCommand = '''
-    select p.year as 'Year', i.name as 'Institution', hr.gender as 'Gender', sum(hospitalizations) as 'Total Patients'
+    select p.year as 'Year', i.name as 'Institution', hr.gender as 'Gender', (sum(hr.hospitalizations) + sum(hr.outpatient)) as 'Total Patients'
     from healthRegistries hr join periods p on p.id=hr.periodId
     join institutions i on i.id=hr.institutionId
     where hr.gender != 'I'
