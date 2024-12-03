@@ -419,7 +419,7 @@ def deathsPerYearPerGenderEachInstitution():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
-# HOME PAGE
+# HOME PAGE  -- documented
 @app.route("/")
 def index():
     handler = DBHandler.DBHandler()

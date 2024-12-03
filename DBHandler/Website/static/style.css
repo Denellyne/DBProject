@@ -15,7 +15,7 @@ body {
   box-sizing: border-box;
   position: relative;
   padding-bottom: 1em; /* Height of footer */
-  min-height: 100%;
+  min-height: 10%;
 }
 
 
@@ -25,7 +25,10 @@ footer {
   color: #333333;
   border-top: 1px solid darkgray;
   padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
   margin-bottom: 10px;
+  transform: translate(0, 30px);
   justify-content:center;
   align-items:center;
   position: absolute;
