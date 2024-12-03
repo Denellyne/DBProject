@@ -12,6 +12,17 @@ body {
   height: 100vh;
 }
 
+footer {
+  display:flex;
+  font-family: Helvetica, arial, sans-serif;
+  color: #333333;
+  border-top: 1px solid darkgray;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  justify-content:center;
+  align-items:center;
+}
+
 .custom-select {
   position: relative;
   width: auto;

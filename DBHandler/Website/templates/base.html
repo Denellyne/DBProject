@@ -1,7 +1,14 @@
 <!doctype html>
-<title>Flask application</title>
+<title>Morbidity and Mortality in Portuguese Hospitals</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <a class="home" href="/">Home</a>
 <section class="content">
   {% block content %}{% endblock %}
 </section>
+<section class="foot">
+  {% block foot %}{% endblock %}
+
+  <footer>Site created by: </footer>
+
+</section>
+
