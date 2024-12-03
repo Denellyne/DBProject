@@ -143,3 +143,10 @@ where hr.gender != 'I'
 group by p.year, i.name, hr.gender
 order by i.name, p.year;   DONE! :)
 
+--16. number of deaths per year for each gender in each institution
+select p.year as 'Year', i.name as 'Institution', hr.gender as 'Gender', sum(hr.deaths) as 'Total Deaths'
+from healthRegistries hr join periods p on p.id=hr.periodId
+join institutions i on i.id=hr.institutionId
+where hr.gender != 'I'
+group by p.year, i.name, hr.gender
+order by i.name, p.year;   DONE! :)

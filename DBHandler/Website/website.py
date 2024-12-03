@@ -402,6 +402,23 @@ def patientsPerYearPerGenderEachInstitution():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+@app.route("/deathsPerYearPerGenderEachInstitution")
+def deathsPerYearPerGenderEachInstitution():
+    handler = DBHandler.DBHandler()
+
+    sqlCommand = '''
+    select p.year as 'Year', i.name as 'Institution', hr.gender as 'Gender', sum(hr.deaths) as 'Total Deaths'
+    from healthRegistries hr join periods p on p.id=hr.periodId
+    join institutions i on i.id=hr.institutionId
+    where hr.gender != 'I'
+    group by p.year, i.name, hr.gender
+    order by i.name, p.year;
+  '''
+    data, results = handler.queryForHTML(sqlCommand)
+    info = "Total Number of Deaths per Year in each Institution for each Gender"
+    return render_template('search.html', sql=data, info=addInfo(info, results))
+
+
 # HOME PAGE
 @app.route("/")
 def index():
