@@ -260,6 +260,7 @@ def mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+#  -- documented
 @app.route("/regionsByHospitalizations")
 def regionsByTotalHospitalizations():
     handler = DBHandler.DBHandler()
@@ -279,6 +280,7 @@ def regionsByTotalHospitalizations():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+#  -- documented
 @app.post("/regionsByHospitalizationsForGivenYear")
 @app.route("/regionsByHospitalizationsForGivenYear")
 def regionsByHospitalizationsForGivenYear():
@@ -303,6 +305,7 @@ def regionsByHospitalizationsForGivenYear():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+#  -- documented
 @app.post("/diagnosisGroupMostHospitalizationsPerMonthOfGivenYearAndAgeGroup")
 @app.route("/diagnosisGroupMostHospitalizationsPerMonthOfGivenYearAndAgeGroup")
 def diagnosisGroupMostHospitalizationsPerMonthOfGivenYearAndAgeGroup():
@@ -338,6 +341,7 @@ def diagnosisGroupMostHospitalizationsPerMonthOfGivenYearAndAgeGroup():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+#  -- documented
 @app.post("/institutionsHospitalizationsPerYearForGivenInstitution")
 @app.route("/institutionsHospitalizationsPerYearForGivenInstitution")
 def institutionsHospitalizationsPerYearForGivenInstitution():
