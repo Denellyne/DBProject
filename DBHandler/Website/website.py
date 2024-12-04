@@ -157,6 +157,7 @@ def morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+#  -- documented
 @app.route("/mostFatalDiagnosisGroupPerAgeGroup")
 def mostFatalDiagnosisGroupPerAgeGroup():
     handler = DBHandler.DBHandler()
@@ -168,9 +169,9 @@ def mostFatalDiagnosisGroupPerAgeGroup():
   group by dg.description, ag.minimumAge, ag.maximumAge
   order by dg.description, ag.minimumAge)
 
-  select (minimumAge || ' - ' || maximumAge) as 'AgeRange', description as 'Diagnosis Group', max(TotalDeaths) as 'TotalDeaths'
+  select (minimumAge || ' - ' || maximumAge) as 'Age Range', description as 'Diagnosis Group', max(TotalDeaths) as 'Total Deaths'
   from deathsPerGroupAndDoenca
-  group by AgeRange
+  group by minimumAge
   order by minimumAge;
   '''
     data, results = handler.queryForHTML(sqlCommand)
@@ -178,6 +179,7 @@ def mostFatalDiagnosisGroupPerAgeGroup():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+#  -- documented
 @app.post("/mostFatalDiagnosisGroupPerMonthOfGivenYear")
 @app.route("/mostFatalDiagnosisGroupPerMonthOfGivenYear")
 def mostFatalDiagnosisGroupPerMonthOfGivenYear():
