@@ -200,6 +200,7 @@ def mostFatalDiagnosisGroupPerMonthOfGivenYear():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+#  -- documented
 @app.post("/diagnosisGroupMostHospitalizationsPerMonthOfGivenYear")
 @app.route("/diagnosisGroupMostHospitalizationsPerMonthOfGivenYear")
 def diagnosisGroupMostHospitalizationsPerMonthOfGivenYear():
@@ -224,6 +225,7 @@ def diagnosisGroupMostHospitalizationsPerMonthOfGivenYear():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+#  -- documented
 @app.post("/mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup")
 @app.route("/mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup")
 def mostFatalDiagnosisGroupPerMonthOfGivenYearAndAgeGroup():
