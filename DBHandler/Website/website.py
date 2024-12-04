@@ -12,7 +12,7 @@ def search():
     data = handler.queryForHTML(sqlCommand)
     return render_template('search.html', sql=data)
 
-
+#  -- documented
 @app.post("/institutions")
 @app.route("/institutions")
 def institutions():
@@ -35,6 +35,7 @@ def institutions():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+#  -- documented
 @app.post("/diagnosisGroupsByInstitution")
 @app.route("/diagnosisGroupsByInstitution")
 def diagnosisGroupsByInstitution():
@@ -47,7 +48,7 @@ def diagnosisGroupsByInstitution():
         year = request.form["year"]
 
     handler = DBHandler.DBHandler()
-    sqlCommand = "SELECT d.description as Description,(a.minimumAge || ' - ' || a.maximumAge) as 'Age Range',i.name as Institution,r.name as Region,p.month as Month,p.year as Year,hR.gender as Gender,hR.hospitalizations as Hospitalizations,hR.daysOfHospitalization as 'Days of Hospitalization',hR.outpatient as Outpatient,hR.deaths as Deaths FROM healthRegistries hR inner join institutions i on hR.institutionId = i.id inner join periods p on hR.periodId = p.id inner join regions r on i.regionId = r.id inner join diagnosticGroups d on hR.diagnosticGroupId = d.id inner join ageGroups a on hR.ageGroupId = a.id WHERE p.month ="
+    sqlCommand = "SELECT d.description as 'Diagnosis Group',(a.minimumAge || ' - ' || a.maximumAge) as 'Age Range',i.name as Institution,r.name as Region,p.month as Month,p.year as Year,hR.gender as Gender,hR.hospitalizations as Hospitalizations,hR.daysOfHospitalization as 'Days of Hospitalization',hR.outpatient as Outpatient,hR.deaths as Deaths FROM healthRegistries hR inner join institutions i on hR.institutionId = i.id inner join periods p on hR.periodId = p.id inner join regions r on i.regionId = r.id inner join diagnosticGroups d on hR.diagnosticGroupId = d.id inner join ageGroups a on hR.ageGroupId = a.id WHERE p.month ="
     sqlCommand += str(month) + " and p.year=" + str(year) + " and i.id=" + \
         str(institutionId) + " ORDER BY d.code,a.minimumAge desc,hR.gender desc"
 
@@ -71,6 +72,7 @@ def diagnosisGroupsByInstitution():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+#  -- documented
 @app.route("/institutionsByDeaths")
 def institutionsByDeaths():
     handler = DBHandler.DBHandler()
@@ -90,6 +92,7 @@ def institutionsByDeaths():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+#  -- documented
 @app.route("/regionsByDeaths")
 def regionsByDeath():
     handler = DBHandler.DBHandler()
@@ -109,6 +112,7 @@ def regionsByDeath():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+#  -- documented
 @app.route("/institutionsByHospitalizations")
 def institutionsByHospitalizations():
     handler = DBHandler.DBHandler()
@@ -126,21 +130,23 @@ def institutionsByHospitalizations():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+#  -- documented
 @app.route("/diagnosisGroupsByDeathsAndHospitalizations")
 def diagnosisGroupsByDeathsAndHospitalizations():
     handler = DBHandler.DBHandler()
 
     sqlCommand = '''
-  select dg.description as 'Diagnosis Group', sum(hr.hospitalizations) as 'Total Hospitalizations Per Diagnosis Group', sum(hr.deaths) as 'Total Deaths Per Diagnosis Group'
+  select dg.description as 'Diagnosis Group', sum(hr.hospitalizations) as 'Total Hospitalizations', sum(hr.deaths) as 'Total Deaths'
   from diagnosticGroups dg join healthRegistries hr on dg.id=hr.diagnosticgroupId
   group by dg.description
   order by sum(hr.hospitalizations) desc, sum(hr.deaths) desc;
   '''
     data, results = handler.queryForHTML(sqlCommand)
-    info = "Diagnosis Groups Ordered by Total Deaths and Hospitalizations"
+    info = "Diagnosis Groups Ordered by Total Hospitalizations and Deaths"
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+#  -- documented
 @app.route("/morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup")
 def morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup():
     handler = DBHandler.DBHandler()
@@ -153,7 +159,7 @@ def morbidityAndMortalityPerAgeGroupForEachDiagnosisGroup():
   order by dg.description, ag.minimumAge;
   '''
     data, results = handler.queryForHTML(sqlCommand)
-    info = "Diagnosis Groups for each Age Group Ordered by Total Deaths and Hospitalizations"
+    info = "Diagnosis Groups for each Age Group by Total Deaths and Hospitalizations"
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
