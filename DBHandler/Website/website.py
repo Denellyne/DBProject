@@ -361,6 +361,7 @@ def institutionsHospitalizationsPerYearForGivenInstitution():
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 
+#  -- documented
 @app.post("/institutionsDeathsPerYearForGivenInstitution")
 @app.route("/institutionsDeathsPerYearForGivenInstitution")
 def institutionsDeathsPerYearForGivenInstitution():
