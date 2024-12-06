@@ -119,7 +119,7 @@ class DBHandler:
       institutionId = self._cursor.execute('SELECT id FROM institutions where name = ?',(entry.institution.name,)).fetchone()[0]
       ageId = self._cursor.execute('SELECT id FROM ageGroups where (minimumAge,maximumAge) = (?,?)',(entry.ageGroup.minimumAge,entry.ageGroup.maximumAge)).fetchone()[0]
       periodId = self._cursor.execute('SELECT id FROM periods where (month,year) = (?,?)',(entry.period.month,entry.period.year)).fetchone()[0]
-      diagnosticId = self._cursor.execute('SELECT id FROM diagnosticGroups where code = ?',(entry.diagnostic.index,)).fetchone()[0]
+      diagnosticId = self._cursor.execute('SELECT id FROM diagnosticGroups where (code,description) = (?,?)',(entry.diagnostic.index,entry.diagnostic.description)).fetchone()[0]
 
       health = entry.healthRegistry
       self._cursor.execute("INSERT INTO healthRegistries VALUES (NULL,?,?,?,?,?,?,?,?,?)",
