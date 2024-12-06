@@ -5,12 +5,12 @@ from Website.util import addSubmit, addQuerySelector, sortAndGetCorrectIdForQuer
 app = Flask(__name__)
 
 
-@app.post("/search")
-def search():
-    sqlCommand = request.form["sql"]
-    handler = DBHandler.DBHandler()
-    data = handler.queryForHTML(sqlCommand)
-    return render_template('search.html', sql=data)
+#@app.post("/search")
+#def search():
+#    sqlCommand = request.form["sql"]
+#    handler = DBHandler.DBHandler()
+#    data = handler.queryForHTML(sqlCommand)
+#    return render_template('search.html', sql=data)
 
 #  -- documented
 @app.post("/institutions")
@@ -434,6 +434,30 @@ def deathsPerYearPerGenderEachInstitution():
     info = "Total Number of Deaths per Year in each Institution for each Gender"
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
+
+# -- documented
+@app.post("/deathRateEachDiagnosisGroupPerGender")
+@app.route("/deathRateEachDiagnosisGroupPerGender")
+def deathRateEachDiagnosisGroupPerGender():
+    genId = 1
+    if (request.method == 'POST'):
+        genId = request.form["gender"]
+
+    handler = DBHandler.DBHandler()
+    sqlCommand = "with gen as (select distinct gender from healthRegistries where gender not in('I')), genTable as (select row_number() over (order by gender desc) as 'genId', gender from gen), totalPatientsPerGroup as (select dg.description as 'groups', hr.gender, (sum(hr.hospitalizations) + sum(hr.outpatient)) as 'totalPatients', sum(hr.deaths) as 'deaths' from healthRegistries hr join diagnosticGroups dg on hr.diagnosticGroupId = dg.id where hr.gender = (select gender from genTable where genId = "
+    sqlCommand += str(genId) + \
+        ") group by dg.description, hr.gender) select tp.groups as 'Diagnosis Group', tp.gender as 'Gender', tp.totalPatients as 'Total Patients', tp.deaths as 'Deaths', round((tp.deaths*1.0 / tp.totalPatients *1.0) * 100,5) || '%' as 'Death Rate' from totalPatientsPerGroup tp order by round((tp.deaths*1.0 / tp.totalPatients *1.0) * 100,5) desc"
+
+    data, results = handler.queryForHTML(sqlCommand)
+    query, genders = addQuerySelector("gender", handler.query(
+        "with gen as (select distinct gender from healthRegistries where gender not in('I')) select row_number() over (order by gender desc) as 'genId', gender from gen"), genId)
+    queryList = [query]
+
+    querys = addSubmit(
+        "deathRateEachDiagnosisGroupPerGender", queryList)
+    info = "Death Rate in each Diagnosis Group for the Gender: " + genders
+
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
 # HOME PAGE  -- documented
 @app.route("/")

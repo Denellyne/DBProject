@@ -150,3 +150,18 @@ join institutions i on i.id=hr.institutionId
 where hr.gender != 'I'
 group by p.year, i.name, hr.gender
 order by i.name, p.year;   DONE! :)
+
+--17. Fatality rate for each diagnostic group based on gender and num patients per disease based on gender
+with gen as (select distinct gender
+from healthRegistries
+where gender not in('I')),
+genTable as (select row_number() over (order by gender desc) as 'genId', gender
+from gen),
+totalPatientsPerGroup as (select dg.description as 'groups', hr.gender, (sum(hr.hospitalizations) + sum(hr.outpatient)) as 'totalPatients', sum(hr.deaths) as 'deaths'
+from healthRegistries hr join diagnosticGroups dg on hr.diagnosticGroupId = dg.id
+where hr.gender = (select gender from genTable where genId = ?)
+group by dg.description, hr.gender)
+
+select tp.groups as 'Diagnosis Group', tp.gender as 'Gender', tp.totalPatients as 'Total Patients', tp.deaths as 'Deaths', round((tp.deaths*1.0 / tp.totalPatients *1.0) * 100,5) || '%' as 'Death Rate'
+from totalPatientsPerGroup tp
+order by round((tp.deaths*1.0 / tp.totalPatients *1.0) * 100,5) desc;   DONE! :)
