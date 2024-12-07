@@ -18,9 +18,9 @@ body {
   min-height: 10%;
 }
 
-
 footer {
-  display:flex;
+  font-size: 12px;
+  display: flex;
   font-family: Helvetica, arial, sans-serif;
   color: #333333;
   border-top: 1px solid darkgray;
@@ -29,8 +29,9 @@ footer {
   margin-top: 10px;
   margin-bottom: 10px;
   transform: translate(0, 30px);
-  justify-content:center;
-  align-items:center;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   position: absolute;
   bottom: 0;
   width: 100%;
