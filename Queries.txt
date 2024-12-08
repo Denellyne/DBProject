@@ -165,3 +165,12 @@ group by dg.description, hr.gender)
 select tp.groups as 'Diagnosis Group', tp.gender as 'Gender', tp.totalPatients as 'Total Patients', tp.deaths as 'Deaths', round((tp.deaths*1.0 / tp.totalPatients *1.0) * 100,5) || '%' as 'Death Rate'
 from totalPatientsPerGroup tp
 order by round((tp.deaths*1.0 / tp.totalPatients *1.0) * 100,5) desc;   DONE! :)
+
+-- 18. num total de internamentos e num e % de outpatient e internamento para cada Diagnosis Group
+with totals as (select diagnosticGroupId, sum(hospitalizations) as 'hospitalizations', sum (outpatient) as 'outpatient', sum(hospitalizations) + sum (outpatient) as 'cases'
+from healthRegistries
+group by diagnosticGroupId)
+
+select dg.description as 'Diagnosis Group', t.cases as 'Total Patients', t.hospitalizations as 'Hospitalizations', t.outpatient as 'Outpatients', (round(t.hospitalizations *1.0 / t.cases *100, 2) || '%') as '% Hospitalizations', (round(t.outpatient *1.0 / t.cases *100, 2) || '%') as '% Outpatients'
+from diagnosticGroups dg join totals t on dg.id=t.diagnosticGroupId
+order by dg.description asc;   DONE! :)

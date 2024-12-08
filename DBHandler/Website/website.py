@@ -459,6 +459,26 @@ def deathRateEachDiagnosisGroupPerGender():
 
     return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
 
+
+# -- documented
+@app.route("/diagnosisGroupsPercentageHospitalizationsOutpatient")
+def diagnosisGroupsPercentageHospitalizationsOutpatient():
+    handler = DBHandler.DBHandler()
+
+    sqlCommand = '''
+    with totals as (select diagnosticGroupId, sum(hospitalizations) as 'hospitalizations', sum (outpatient) as 'outpatient', sum(hospitalizations) + sum (outpatient) as 'cases'
+    from healthRegistries
+    group by diagnosticGroupId)
+
+    select dg.description as 'Diagnosis Group',  t.cases as 'Total Patients', t.hospitalizations as 'Hospitalizations', t.outpatient as 'Outpatients', (round(t.hospitalizations *1.0 / t.cases *100, 2) || '%') as '% Hospitalizations', (round(t.outpatient *1.0 / t.cases *100, 2) || '%') as '% Outpatients'
+    from diagnosticGroups dg join totals t on dg.id=t.diagnosticGroupId
+    order by dg.description asc;
+  '''
+    data, results = handler.queryForHTML(sqlCommand)
+    info = "% Hospitalizations and % Outpatient of Total Number of Cases in each Diagnosis Group"
+    return render_template('search.html', sql=data, info=addInfo(info, results))
+
+
 # HOME PAGE  -- documented
 @app.route("/")
 def index():
