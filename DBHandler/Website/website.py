@@ -479,6 +479,31 @@ def diagnosisGroupsPercentageHospitalizationsOutpatient():
     return render_template('search.html', sql=data, info=addInfo(info, results))
 
 
+# -- documented
+@app.post("/diagnosisGroupsPercentageHospitalizationsOutpatientPerGivenGender")
+@app.route("/diagnosisGroupsPercentageHospitalizationsOutpatientPerGivenGender")
+def diagnosisGroupsPercentageHospitalizationsOutpatientPerGivenGender():
+    genId = 1
+    if (request.method == 'POST'):
+        genId = request.form["gender"]
+
+    handler = DBHandler.DBHandler()
+    sqlCommand = "with gen as (select distinct gender from healthRegistries where gender not in('I')), genTable as (select row_number() over (order by gender desc) as 'genId', gender from gen), totals as (select diagnosticGroupId, gender, sum(hospitalizations) as 'hospitalizations', sum (outpatient) as 'outpatient', sum(hospitalizations) + sum (outpatient) as 'cases' from healthRegistries where gender = (select gender from genTable where genId = "
+    sqlCommand += str(genId) + \
+        ") group by diagnosticGroupId) select dg.description as 'Diagnosis Group', t.gender as 'Gender',t.hospitalizations as 'Hospitalizations', t.outpatient as 'Outpatients', t.cases as 'Total Cases', (round(t.hospitalizations *1.0 / t.cases *100, 2) || '%') as '% Hospitalizations', (round(t.outpatient *1.0 / t.cases *100, 2) || '%') as '% Outpatients' from diagnosticGroups dg join totals t on dg.id=t.diagnosticGroupId order by dg.description asc;"
+
+    data, results = handler.queryForHTML(sqlCommand)
+    query, genders = addQuerySelector("gender", handler.query(
+        "with gen as (select distinct gender from healthRegistries where gender not in('I')) select row_number() over (order by gender desc) as 'genId', gender from gen"), genId)
+    queryList = [query]
+
+    querys = addSubmit(
+        "diagnosisGroupsPercentageHospitalizationsOutpatientPerGivenGender", queryList)
+    info = "% Hospitalizations and % Outpatient of Total Number of Cases in each Diagnosis Group for the Gender: " + genders
+
+    return render_template('search.html', sql=data, querys=querys, info=addInfo(info, results))
+
+
 # HOME PAGE  -- documented
 @app.route("/")
 def index():
