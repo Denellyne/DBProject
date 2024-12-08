@@ -183,6 +183,6 @@ from healthRegistries
 where gender = (select gender from genTable where genId = ?)
 group by diagnosticGroupId)
 
-select dg.description as 'Diagnosis Group', t.gender as 'Gender',t.hospitalizations as 'Hospitalizations', t.outpatient as 'Outpatients', t.cases as 'Total Cases', (round(t.hospitalizations *1.0 / t.cases *100, 2) || '%') as '% Hospitalizations', (round(t.outpatient *1.0 / t.cases *100, 2) || '%') as '% Outpatients'
+select dg.description as 'Diagnosis Group', t.gender as 'Gender', , t.cases as 'Total Patients', t.hospitalizations as 'Hospitalizations', t.outpatient as 'Outpatients', (round(t.hospitalizations *1.0 / t.cases *100, 2) || '%') as '% Hospitalizations', (round(t.outpatient *1.0 / t.cases *100, 2) || '%') as '% Outpatients'
 from diagnosticGroups dg join totals t on dg.id=t.diagnosticGroupId
 order by dg.description asc;    DONE! :)

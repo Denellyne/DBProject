@@ -490,7 +490,7 @@ def diagnosisGroupsPercentageHospitalizationsOutpatientPerGivenGender():
     handler = DBHandler.DBHandler()
     sqlCommand = "with gen as (select distinct gender from healthRegistries where gender not in('I')), genTable as (select row_number() over (order by gender desc) as 'genId', gender from gen), totals as (select diagnosticGroupId, gender, sum(hospitalizations) as 'hospitalizations', sum (outpatient) as 'outpatient', sum(hospitalizations) + sum (outpatient) as 'cases' from healthRegistries where gender = (select gender from genTable where genId = "
     sqlCommand += str(genId) + \
-        ") group by diagnosticGroupId) select dg.description as 'Diagnosis Group', t.gender as 'Gender',t.hospitalizations as 'Hospitalizations', t.outpatient as 'Outpatients', t.cases as 'Total Cases', (round(t.hospitalizations *1.0 / t.cases *100, 2) || '%') as '% Hospitalizations', (round(t.outpatient *1.0 / t.cases *100, 2) || '%') as '% Outpatients' from diagnosticGroups dg join totals t on dg.id=t.diagnosticGroupId order by dg.description asc;"
+        ") group by diagnosticGroupId) select dg.description as 'Diagnosis Group', t.gender as 'Gender', t.cases as 'Total Patients', t.hospitalizations as 'Hospitalizations', t.outpatient as 'Outpatients', (round(t.hospitalizations *1.0 / t.cases *100, 2) || '%') as '% Hospitalizations', (round(t.outpatient *1.0 / t.cases *100, 2) || '%') as '% Outpatients' from diagnosticGroups dg join totals t on dg.id=t.diagnosticGroupId order by dg.description asc;"
 
     data, results = handler.queryForHTML(sqlCommand)
     query, genders = addQuerySelector("gender", handler.query(
